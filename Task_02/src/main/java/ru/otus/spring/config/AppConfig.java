@@ -14,7 +14,7 @@ import java.util.Scanner;
 @Configuration
 @ComponentScan(basePackages = "ru.otus.spring")
 @PropertySource("classpath:application.properties")
-public class appConfig {
+public class AppConfig {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();

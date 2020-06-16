@@ -36,10 +36,12 @@ public class QuestionServiceImpl implements QuestionService {
                 correctAnswerCount++;
             }
         }
-        double score = 1.0 * correctAnswerCount / questions.size();
-        String testResult = score >= correctAnswerCountPercent / 100 ? "passed" : "failed";
         ioService.print("Dear " + name + ".");
-        ioService.print("You " + testResult + " the test.");
+        ioService.print("You " + (isPassed(correctAnswerCount) ? "passed" : "failed") + " the test.");
+    }
+
+    private boolean isPassed(int correctAnswerCount) {
+        return 1.0 * correctAnswerCount / dao.getQuestions().size() >= correctAnswerCountPercent / 100;
     }
 
     public void printQuestion(Question question) {
