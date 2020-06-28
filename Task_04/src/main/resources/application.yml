@@ -5,5 +5,5 @@ spring:
 application:
   file-name: /questions_${locale}.csv
   min-correct-answer-percent: 50
-locale: en
+locale: ru
 

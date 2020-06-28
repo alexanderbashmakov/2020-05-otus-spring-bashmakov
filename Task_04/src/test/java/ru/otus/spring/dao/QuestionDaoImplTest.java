@@ -3,19 +3,22 @@ package ru.otus.spring.dao;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.config.TestConfig;
+import ru.otus.spring.config.YmlConfig;
 import ru.otus.spring.domain.Question;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Класс QuestionDaoImpl")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {QuestionDaoImpl.class, TestConfig.class})
+@SpringBootTest
+@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {QuestionDaoImpl.class, YmlConfig.class})
 class QuestionDaoImplTest {
 
     @Autowired

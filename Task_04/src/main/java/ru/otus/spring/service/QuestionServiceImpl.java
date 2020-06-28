@@ -26,17 +26,17 @@ public class QuestionServiceImpl implements QuestionService {
         String name = getStudentName();
         List<Question> questions = dao.getQuestions();
         questions.forEach(this::getAnswer);
-        ioService.print(messageBundleService.getMessage("dear") + " " + name + ".");
+        ioService.print(messageBundleService.getMessage("dear", name));
         ioService.print(messageBundleService.getMessage(testingResult.checkResult(props.getMinCorrectAnswerPercent()) ? "passed" : "failed"));
     }
 
-    public void getAnswer(Question question) {
+    private void getAnswer(Question question) {
         printQuestion(question);
         String answer = ioService.read();
         testingResult.checkAnswer(answer, question.getCorrectAnswer());
     }
 
-    public void printQuestion(Question question) {
+    private void printQuestion(Question question) {
         ioService.print(question.getQuestion());
         List<String> answers = question.getAnswers();
         if (answers != null) {
