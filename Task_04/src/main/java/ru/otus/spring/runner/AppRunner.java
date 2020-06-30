@@ -6,7 +6,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.service.QuestionService;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class AppRunner implements ApplicationRunner {
     private final QuestionService questionService;

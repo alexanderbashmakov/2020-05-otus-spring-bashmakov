@@ -9,7 +9,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Класс TestingResult")
-@ExtendWith(SpringExtension.class)
 class TestingResultTest {
 
     private TestingResult testingResult;

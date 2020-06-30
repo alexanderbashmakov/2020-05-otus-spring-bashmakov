@@ -1,7 +1,9 @@
 spring:
   messages:
     basename: bundle
-
+  shell:
+    interactive:
+      enabled: false
 application:
   file-name: /questions_test.csv
   min-correct-answer-percent: 50
