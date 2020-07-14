@@ -12,7 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.library.domain.Author;
 import ru.otus.library.repository.AuthorRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.times;

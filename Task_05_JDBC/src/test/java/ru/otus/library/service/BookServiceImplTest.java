@@ -12,14 +12,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
-import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

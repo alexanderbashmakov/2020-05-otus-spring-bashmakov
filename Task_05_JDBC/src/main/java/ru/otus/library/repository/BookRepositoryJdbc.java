@@ -51,7 +51,7 @@ public class BookRepositoryJdbc implements BookRepository {
 
     @Override
     public void update(Book book) {
-        Book updBook = getById(book.getId()).orElseThrow(EntityNotFound::new);
+        Book updBook = Book.builder().name(book.getName()).build();
         Author updAuthor = authorRepository.getByName(book.getAuthor().getName()).orElseGet(() -> authorRepository.insert(
                 Author.builder().name(book.getAuthor().getName()).build()));
         Genre updGenre = genreRepository.getByName(book.getGenre().getName()).orElseGet(() -> genreRepository.insert(

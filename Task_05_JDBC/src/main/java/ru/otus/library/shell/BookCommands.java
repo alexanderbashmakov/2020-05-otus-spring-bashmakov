@@ -6,7 +6,6 @@ import org.springframework.shell.standard.ShellMethod;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
-import ru.otus.library.service.AuthorService;
 import ru.otus.library.service.BookService;
 
 @ShellComponent

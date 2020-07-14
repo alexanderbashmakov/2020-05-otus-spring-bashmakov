@@ -9,7 +9,6 @@ import ru.otus.library.domain.Author;
 import ru.otus.library.exceptions.EntityNotFound;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @JdbcTest
 @Import(AuthorRepositoryJdbc.class)

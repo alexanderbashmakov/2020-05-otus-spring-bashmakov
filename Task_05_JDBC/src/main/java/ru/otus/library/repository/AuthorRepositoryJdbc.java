@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Author;
-import ru.otus.library.exceptions.EntityNotFound;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

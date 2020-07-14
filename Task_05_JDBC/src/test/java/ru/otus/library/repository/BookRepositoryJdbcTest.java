@@ -10,10 +10,7 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.exceptions.EntityNotFound;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Класс BookRepositoryJdbc:")
 @JdbcTest

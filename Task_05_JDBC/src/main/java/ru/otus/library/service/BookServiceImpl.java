@@ -1,18 +1,13 @@
 package ru.otus.library.service;
 
 import de.vandermeer.asciitable.AsciiTable;
-import de.vandermeer.skb.interfaces.document.TableRowStyle;
-import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.exceptions.EntityNotFound;
-import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
