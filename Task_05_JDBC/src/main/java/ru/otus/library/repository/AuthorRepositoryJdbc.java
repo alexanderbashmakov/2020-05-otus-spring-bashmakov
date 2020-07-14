@@ -34,11 +34,8 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
     }
 
     @Override
-    public Author update(Author author) {
-        Author updAuthor = getById(Objects.requireNonNull(author.getId())).orElseThrow(EntityNotFound::new);
-        updAuthor.setName(author.getName());
+    public void update(Author author) {
         jdbc.update("update authors set name = :name where id = :id", Map.of("id", author.getId(), "name", author.getName()));
-        return updAuthor;
     }
 
     @Override
@@ -60,7 +57,7 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
 
     @Override
     public List<Author> getAll() {
-        return jdbc.query("select * from authors", new AuthorMapper());
+        return jdbc.query("select id, name from authors", new AuthorMapper());
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

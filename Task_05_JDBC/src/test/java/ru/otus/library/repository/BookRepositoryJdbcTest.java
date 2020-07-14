@@ -97,6 +97,8 @@ class BookRepositoryJdbcTest {
         book.setGenre(Genre.builder().name("Detective").build());
         jdbc.update(book);
         Book actual = jdbc.getById(book.getId()).orElseThrow(EntityNotFound::new);
-        assertThat(actual).isEqualTo(book);
+        assertThat(actual).matches(b -> b.getName().equals(book.getName()) &&
+                b.getAuthor().getName().equals(book.getAuthor().getName()) &&
+                book.getGenre().getName().equals(book.getGenre().getName()));
     }
 }

@@ -38,13 +38,6 @@ class AuthorRepositoryJdbcTest {
     }
 
     @Test
-    @DisplayName("выбрасывает исключение update()")
-    public void throwOnUpdate() {
-        Author author = Author.builder().id(3L).name("Unknown").build();
-        assertThatThrownBy(() -> jdbc.update(author)).isInstanceOf(EntityNotFound.class);
-    }
-
-    @Test
     @DisplayName("удаляет запись из БД deleteById()")
     public void deleteById() {
         jdbc.insert(new Author(10L, "AuthorForDelete"));

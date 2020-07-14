@@ -34,12 +34,14 @@ public class BookRepositoryJdbc implements BookRepository {
 
     @Override
     public Book insert(@NonNull Book book) {
-        Author author = authorRepository.insert(book.getAuthor());
-        Genre genre = genreRepository.insert(book.getGenre());
+        book.setAuthor(authorRepository.getByName(book.getAuthor().getName()).orElseGet(() -> authorRepository.insert(
+                Author.builder().name(book.getAuthor().getName()).build())));
+        book.setGenre(genreRepository.getByName(book.getGenre().getName()).orElseGet(() -> genreRepository.insert(
+                Genre.builder().name(book.getGenre().getName()).build())));
         MapSqlParameterSource ps = new MapSqlParameterSource().
                 addValue("name", book.getName()).
-                addValue("author_id", author.getId()).
-                addValue("genre_id", genre.getId());
+                addValue("author_id", book.getAuthor().getId()).
+                addValue("genre_id", book.getGenre().getId());
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update("insert into books (name, author_id, genre_id) values (:name, :author_id, :genre_id)", ps, keyHolder);
         Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
@@ -48,19 +50,20 @@ public class BookRepositoryJdbc implements BookRepository {
     }
 
     @Override
-    public Book update(Book book) {
+    public void update(Book book) {
         Book updBook = getById(book.getId()).orElseThrow(EntityNotFound::new);
-        Author author = authorRepository.insert(book.getAuthor());
-        Genre genre = genreRepository.insert(book.getGenre());
+        Author updAuthor = authorRepository.getByName(book.getAuthor().getName()).orElseGet(() -> authorRepository.insert(
+                Author.builder().name(book.getAuthor().getName()).build()));
+        Genre updGenre = genreRepository.getByName(book.getGenre().getName()).orElseGet(() -> genreRepository.insert(
+                Genre.builder().name(book.getGenre().getName()).build()));
         updBook.setName(book.getName());
-        updBook.setAuthor(author);
-        updBook.setGenre(genre);
+        updBook.setAuthor(updAuthor);
+        updBook.setGenre(updGenre);
         jdbc.update("update books set name = :name, author_id = :author_id, genre_id = :genre_id where id = :id",
                 Map.of("id", book.getId(), "name", book.getName(),
-                        "author_id", author.getId(),
-                        "genre_id", genre.getId())
+                        "author_id", updAuthor.getId(),
+                        "genre_id", updGenre.getId())
         );
-        return updBook;
     }
 
     @Override

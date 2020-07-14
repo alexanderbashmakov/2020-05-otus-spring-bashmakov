@@ -41,13 +41,6 @@ class GenreRepositoryJdbcTest {
     }
 
     @Test
-    @DisplayName("выбрасывает исключение update()")
-    public void throwOnUpdate() {
-        Genre genre = Genre.builder().id(1L).name("Unknown").build();
-        assertThatThrownBy(() -> jdbc.update(genre)).isInstanceOf(EntityNotFound.class);
-    }
-
-    @Test
     @DisplayName("удаляет запись из БД deleteById()")
     public void deleteById() {
         jdbc.insert(new Genre(1L, "GenreForDelete"));

@@ -34,11 +34,8 @@ public class GenreRepositoryJdbc implements GenreRepository {
     }
 
     @Override
-    public Genre update(Genre genre) {
-        Genre updGenre = getById(Objects.requireNonNull(genre.getId())).orElseThrow(EntityNotFound::new);
-        updGenre.setName(genre.getName());
+    public void update(Genre genre) {
         jdbc.update("update genres set name = :name where id = :id", Map.of("id", genre.getId(), "name", genre.getName()));
-        return updGenre;
     }
 
     @Override
@@ -60,7 +57,7 @@ public class GenreRepositoryJdbc implements GenreRepository {
 
     @Override
     public List<Genre> getAll() {
-        return jdbc.query("select * from genres", new GenreMapper());
+        return jdbc.query("select id, name from genres", new GenreMapper());
     }
 
     private static class GenreMapper implements RowMapper<Genre> {
