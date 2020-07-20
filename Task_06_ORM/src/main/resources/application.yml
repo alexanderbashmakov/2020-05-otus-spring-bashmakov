@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+    initialization-mode: always
+    schema: schema.sql
+    data: data.sql
+  messages:
+    basename: bundle
+locale: ru
+
