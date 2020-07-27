@@ -37,7 +37,7 @@ class BookServiceImplTest {
     @MockBean
     private MessageBundleService messageBundleService;
 
-    @DisplayName("сохраняет запись в БД")
+    @DisplayName("сохраняет книгу")
     @Test
     void saveCreate() {
         Book book = Book.builder().
@@ -46,10 +46,10 @@ class BookServiceImplTest {
                 genre(Genre.builder().name("testGenre").build()).
                 build();
         service.save(book);
-        verify(repository, times(1)).insert(book);
+        verify(repository, times(1)).save(book);
     }
 
-    @DisplayName("обновляет запись в БД")
+    @DisplayName("обновляет книгу")
     @Test
     void saveUpdate() {
         Book book = Book.builder().
@@ -59,7 +59,7 @@ class BookServiceImplTest {
                 genre(Genre.builder().name("testGenre").build()).
                 build();
         service.save(book);
-        verify(repository, times(1)).update(book);
+        verify(repository, times(1)).save(book);
     }
 
     @DisplayName("выводит все записи")
@@ -78,7 +78,7 @@ class BookServiceImplTest {
                 genre(Genre.builder().name("testGenre").build()).
                 build());
         Mockito.when(repository.getAll()).thenReturn(books);
-        Mockito.when(repository.count()).thenReturn(1);
+        Mockito.when(repository.count()).thenReturn(1L);
         AsciiTable table = new AsciiTable();
 
         table.addRule();

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.exceptions.EntityNotFound;
 
+import javax.persistence.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -19,45 +20,49 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class GenreRepositoryJdbc implements GenreRepository {
+public class GenreRepositoryJpa implements GenreRepository {
 
+    @PersistenceContext
+    private final EntityManager em;
     private final NamedParameterJdbcOperations jdbc;
 
     @Override
-    public Genre insert(@NonNull Genre genre) {
-        MapSqlParameterSource ps = new MapSqlParameterSource().addValue("name", genre.getName());
-        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbc.update("insert into genres (name) values (:name)", ps, keyHolder);
-        long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
-        genre.setId(id);
-        return genre;
-    }
-
-    @Override
-    public void update(Genre genre) {
-        jdbc.update("update genres set name = :name where id = :id", Map.of("id", genre.getId(), "name", genre.getName()));
+    public Genre save(Genre genre) {
+        if (genre.getId() == null) {
+            em.persist(genre);
+            return genre;
+        } else {
+            return em.merge(genre);
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-        jdbc.update("delete from genres where id = :id", Map.of("id", id));
+        Query query = em.createQuery("delete from Genre g where g.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
     @Override
     public Optional<Genre> getById(Long id) {
-        return jdbc.query("select id, name from genres where id = :id",
-                Map.of("id", id), new GenreMapper()).stream().findFirst();
+        return Optional.ofNullable(em.find(Genre.class, id));
     }
 
     @Override
     public Optional<Genre> getByName(String name) {
-        return jdbc.query("select id, name from genres where name = :name",
-                Map.of("name", name), new GenreMapper()).stream().findFirst();
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g where g.name = :name", Genre.class);
+        query.setParameter("name", name);
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Genre> getAll() {
-        return jdbc.query("select id, name from genres", new GenreMapper());
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
+        return query.getResultList();
     }
 
     private static class GenreMapper implements RowMapper<Genre> {

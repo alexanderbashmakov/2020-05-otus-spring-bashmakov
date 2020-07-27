@@ -1,7 +1,8 @@
 spring:
   datasource:
     url: jdbc:h2:mem:library
-    initialization-mode: always
+    initialization-mode: never
     data: data-test.sql
+
 locale: ru
 

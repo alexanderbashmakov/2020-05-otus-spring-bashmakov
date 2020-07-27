@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository {
-    int count();
-    Book insert(Book book);
-    void update(Book book);
-    void deleteById(long id);
-    Optional<Book> getById(long id);
+    Long count();
+    Book save(Book book);
+    void deleteById(Long id);
+    Optional<Book> getById(Long id);
     Optional<Book> getByName(String name);
     List<Book> getAll();
 

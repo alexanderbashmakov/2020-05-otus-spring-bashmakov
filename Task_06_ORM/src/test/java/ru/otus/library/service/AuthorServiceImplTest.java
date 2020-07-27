@@ -34,20 +34,20 @@ class AuthorServiceImplTest {
     @MockBean
     private MessageBundleService messageBundleService;
 
-    @DisplayName("сохраняет запись в БД")
+    @DisplayName("сохраняет автора")
     @Test
     void saveCreate() {
         Author author = Author.builder().name("testAuthor").build();
         service.save(author);
-        verify(repository, times(1)).insert(author);
+        verify(repository, times(1)).save(author);
     }
 
-    @DisplayName("обновляет запись в БД")
+    @DisplayName("обновляет автора")
     @Test
     void saveUpdate() {
         Author author = Author.builder().id(10L).name("testGenre").build();
         service.save(author);
-        verify(repository, times(1)).update(author);
+        verify(repository, times(1)).save(author);
     }
 
     @DisplayName("выводит все записи")

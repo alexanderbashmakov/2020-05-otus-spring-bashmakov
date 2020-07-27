@@ -3,6 +3,7 @@ package ru.otus.library.service;
 import de.vandermeer.asciitable.AsciiTable;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Book;
 import ru.otus.library.exceptions.EntityNotFound;
 import ru.otus.library.repository.BookRepository;
@@ -17,15 +18,13 @@ public class BookServiceImpl implements BookService {
     private final IOService ioService;
     private final MessageBundleService messages;
 
+    @Transactional
     @Override
     public void save(Book book) {
-        if (book.getId() == null) {
-            bookRepository.insert(book);
-        } else {
-            bookRepository.update(book);
-        }
+        bookRepository.save(book);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public void printAll() {
         List<Book> books = bookRepository.getAll();
@@ -46,12 +45,14 @@ public class BookServiceImpl implements BookService {
         ioService.print(String.format("%s: %d", messages.getMessage("book.total"), bookRepository.count()));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public void printBook(Long id) {
         Book book = bookRepository.getById(id).orElseThrow(EntityNotFound::new);
         ioService.print(book.toString());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         bookRepository.deleteById(id);

@@ -3,6 +3,7 @@ package ru.otus.library.service;
 import de.vandermeer.asciitable.AsciiTable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.GenreRepository;
 
@@ -16,15 +17,13 @@ public class GenreServiceImpl implements GenreService {
     private final IOService ioService;
     private final MessageBundleService bundleService;
 
+    @Transactional
     @Override
     public void save(Genre genre) {
-        if (genre.getId() == null) {
-            genreRepository.insert(genre);
-        } else {
-            genreRepository.update(genre);
-        }
+        genreRepository.save(genre);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public void printAll() {
         List<Genre> genres = genreRepository.getAll();
@@ -40,6 +39,7 @@ public class GenreServiceImpl implements GenreService {
         ioService.print(table.render());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         genreRepository.deleteById(id);

@@ -34,20 +34,20 @@ class GenreServiceImplTest {
     @MockBean
     private MessageBundleService messageBundleService;
 
-    @DisplayName("сохраняет запись в БД")
+    @DisplayName("сохраняет жанр")
     @Test
     void saveCreate() {
         Genre genre = Genre.builder().name("testGenre").build();
         service.save(genre);
-        verify(repository, times(1)).insert(genre);
+        verify(repository, times(1)).save(genre);
     }
 
-    @DisplayName("обновляет запись в БД")
+    @DisplayName("обновляет жанр")
     @Test
     void saveUpdate() {
         Genre genre = Genre.builder().id(10L).name("testGenre").build();
         service.save(genre);
-        verify(repository, times(1)).update(genre);
+        verify(repository, times(1)).save(genre);
     }
 
     @DisplayName("выводит все записи")

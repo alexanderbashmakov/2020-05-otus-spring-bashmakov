@@ -3,6 +3,7 @@ package ru.otus.library.service;
 import de.vandermeer.asciitable.AsciiTable;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Author;
 import ru.otus.library.repository.AuthorRepository;
 
@@ -16,15 +17,13 @@ public class AuthorServiceImpl implements AuthorService {
     private final IOService ioService;
     private final MessageBundleService messages;
 
+    @Transactional
     @Override
     public void save(Author author) {
-        if (author.getId() == null) {
-            authorRepository.insert(author);
-        } else {
-            authorRepository.update(author);
-        }
+        authorRepository.save(author);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public void printAll() {
         List<Author> authors = authorRepository.getAll();
@@ -40,6 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
         ioService.print(table.render());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         authorRepository.deleteById(id);

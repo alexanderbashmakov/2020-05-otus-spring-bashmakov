@@ -21,7 +21,7 @@ public class GenreCommands {
         genreService.save(Genre.builder().id(id).name(name).build());
     }
 
-    @ShellMethod(value = "PrintGenres", key = {"pg", "print-genre"})
+    @ShellMethod(value = "PrintGenres", key = {"pg", "print-genres"})
     public void printGenres() {
         genreService.printAll();
     }
