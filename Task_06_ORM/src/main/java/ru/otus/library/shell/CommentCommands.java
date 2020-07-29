@@ -3,10 +3,7 @@ package ru.otus.library.shell;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.otus.library.domain.Comment;
-import ru.otus.library.domain.Genre;
 import ru.otus.library.service.CommentService;
-import ru.otus.library.service.GenreService;
 
 @ShellComponent
 @AllArgsConstructor
@@ -29,7 +26,7 @@ public class CommentCommands {
     }
 
     @ShellMethod(value = "PrintCommentsByBookId", key = {"pcb", "print-comments-by-book-id"})
-    public void printCommentsByBookId(Long id) { commentService.printComments(id); }
+    public void printCommentsByBookId(Long id) { commentService.printComment(id); }
 
     @ShellMethod(value = "DeleteComment", key = {"dc", "delete-commment"})
     public void deleteComment(Long id) {

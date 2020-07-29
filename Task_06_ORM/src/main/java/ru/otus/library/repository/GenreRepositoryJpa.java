@@ -1,21 +1,12 @@
 package ru.otus.library.repository;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Genre;
-import ru.otus.library.exceptions.EntityNotFound;
 
 import javax.persistence.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -65,10 +56,4 @@ public class GenreRepositoryJpa implements GenreRepository {
         return query.getResultList();
     }
 
-    private static class GenreMapper implements RowMapper<Genre> {
-        @Override
-        public Genre mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Genre(rs.getLong("id"), rs.getString("name"));
-        }
-    }
 }

@@ -2,7 +2,6 @@ package ru.otus.library.repository;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Comment;
 
@@ -42,9 +41,7 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public Optional<Comment> getById(Long id) {
-        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.id = :id", Comment.class);
-        query.setParameter("id", id);
-        return Optional.of(query.getSingleResult());
+        return Optional.of(em.find(Comment.class, id));
     }
 
     @Override

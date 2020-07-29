@@ -101,6 +101,7 @@ class BookRepositoryJpaTest {
         em.persist(book1);
         Book book2 = createBook("Book2", "Author2", "Genre2");
         em.persist(book2);
+        em.clear();
         assertThat(bookRepository.getAll()).containsExactly(book1, book2);
     }
 

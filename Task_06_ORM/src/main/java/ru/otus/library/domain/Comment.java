@@ -21,7 +21,7 @@ public class Comment {
     @Column(name = "comment")
     private String commentStr;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 }

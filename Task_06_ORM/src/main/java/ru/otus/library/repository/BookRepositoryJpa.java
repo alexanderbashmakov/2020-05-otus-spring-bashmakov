@@ -20,7 +20,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Long count() {
-        return (Long) em.createQuery("select count(b) from Book b").getSingleResult();
+        return em.createQuery("select count(b) from Book b", Long.class).getSingleResult();
     }
 
     @Override
@@ -42,9 +42,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Optional<Book> getById(Long id) {
-        TypedQuery<Book> query = em.createQuery("select b from Book b where b.id = :id", Book.class);
-        query.setParameter("id", id);
-        return Optional.ofNullable(query.getSingleResult());
+        return Optional.ofNullable(em.find(Book.class, id));
     }
 
     @Override
@@ -60,7 +58,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public List<Book> getAll() {
-        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
+        TypedQuery<Book> query = em.createQuery("select b from Book b join fetch b.author join fetch b.genre", Book.class);
         return query.getResultList();
     }
 }

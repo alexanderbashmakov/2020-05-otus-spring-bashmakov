@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
-import ru.otus.library.domain.Genre;
 import ru.otus.library.exceptions.EntityNotFound;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.repository.CommentRepository;
@@ -29,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(Comment.builder().book(book).commentStr(comment).build());
     }
 
+    @Transactional
     @Override
     public void update(Long id, String commentStr) {
         Comment comment = commentRepository.getById(id).orElseThrow(EntityNotFound::new);
@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
-    public void printComments(Long id) {
+    public void printComment(Long id) {
         printTable(commentRepository.getByBookId(id));
     }
 
