@@ -26,12 +26,11 @@ public class GenreServiceImpl implements GenreService {
     @Transactional(readOnly = true)
     @Override
     public void printAll() {
-        List<Genre> genres = genreRepository.getAll();
         AsciiTable table = new AsciiTable();
         table.addRule();
         table.addRow(bundleService.getMessage("genre.id"), bundleService.getMessage("genre.name"));
 
-        genres.forEach(genre -> {
+        genreRepository.findAll().forEach(genre -> {
             table.addRule();
             table.addRow(genre.getId(), genre.getName());
         });

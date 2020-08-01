@@ -13,9 +13,9 @@ import ru.otus.library.exceptions.EntityNotFound;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
-@DisplayName("Класс GenreRepositoryJpa:")
-class GenreRepositoryJpaTest {
+@Import(TestRepositoryConfig.class)
+@DisplayName("GenreRepository:")
+class GenreRepositoryTest {
 
     @Autowired
     private GenreRepository genreRepository;
@@ -62,7 +62,7 @@ class GenreRepositoryJpaTest {
         em.persist(genre1);
         Genre genre2 = Genre.builder().name("Genre2").build();
         em.persist(genre2);
-        assertThat(genreRepository.getAll()).containsExactly(genre1, genre2);
+        assertThat(genreRepository.findAll()).containsExactly(genre1, genre2);
     }
 
     @Test
@@ -78,6 +78,6 @@ class GenreRepositoryJpaTest {
     void getById() {
         Genre genre = Genre.builder().name("newGenre").build();
         em.persist(genre);
-        assertThat(genreRepository.getById(genre.getId())).get().isEqualToComparingFieldByField(genre);
+        assertThat(genreRepository.findById(genre.getId())).get().isEqualToComparingFieldByField(genre);
     }
 }

@@ -14,13 +14,13 @@ import ru.otus.library.exceptions.EntityNotFound;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Класс BookRepositoryJdbc:")
 @DataJpaTest
-@Import({BookRepositoryJpa.class, AuthorRepositoryJpa.class, GenreRepositoryJpa.class})
-class BookRepositoryJpaTest {
+@Import(TestRepositoryConfig.class)
+@DisplayName("BookRepository:")
+class BookRepositoryTest {
 
     @Autowired
-    private BookRepositoryJpa bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     private TestEntityManager em;
@@ -58,7 +58,7 @@ class BookRepositoryJpaTest {
         Book book = createBook("Book", "Author", "Genre");
         em.persist(book);
 
-        assertThat(bookRepository.getById(book.getId())).get().isEqualToComparingFieldByField(book);
+        assertThat(bookRepository.findById(book.getId())).get().isEqualToComparingFieldByField(book);
     }
 
     @Test
@@ -67,7 +67,7 @@ class BookRepositoryJpaTest {
         Book book = createBook("Book", "Author", "Genre");
         em.persist(book);
 
-        assertThat(bookRepository.getByName(book.getName())).get().isEqualToComparingFieldByField(book);
+        assertThat(bookRepository.findByName(book.getName())).get().isEqualToComparingFieldByField(book);
     }
 
 
@@ -102,7 +102,7 @@ class BookRepositoryJpaTest {
         Book book2 = createBook("Book2", "Author2", "Genre2");
         em.persist(book2);
         em.clear();
-        assertThat(bookRepository.getAll()).containsExactly(book1, book2);
+        assertThat(bookRepository.findAll()).containsExactly(book1, book2);
     }
 
     @DisplayName("обновляет запись update()")

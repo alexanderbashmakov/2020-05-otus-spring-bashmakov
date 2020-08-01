@@ -57,7 +57,7 @@ class AuthorServiceImplTest {
         Mockito.when(messageBundleService.getMessage("author.name")).thenReturn("author_name");
 
         List<Author> authors = List.of(Author.builder().id(1L).name("author").build());
-        Mockito.when(repository.getAll()).thenReturn(authors);
+        Mockito.when(repository.findAll()).thenReturn(authors);
         AsciiTable table = new AsciiTable();
 
         table.addRule();

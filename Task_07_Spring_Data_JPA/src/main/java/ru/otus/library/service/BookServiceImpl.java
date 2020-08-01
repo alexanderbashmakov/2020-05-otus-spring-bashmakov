@@ -27,7 +27,6 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public void printAll() {
-        List<Book> books = bookRepository.getAll();
         AsciiTable table = new AsciiTable();
         table.addRule();
         table.addRow(
@@ -36,7 +35,7 @@ public class BookServiceImpl implements BookService {
                 messages.getMessage("book.author"),
                 messages.getMessage("book.genre"));
 
-        books.forEach(book -> {
+        bookRepository.findAll().forEach(book -> {
             table.addRule();
             table.addRow(book.getId(), book.getName(), book.getAuthor().getName(), book.getGenre().getName());
         });
@@ -48,7 +47,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public void printBook(Long id) {
-        Book book = bookRepository.getById(id).orElseThrow(EntityNotFound::new);
+        Book book = bookRepository.findById(id).orElseThrow(EntityNotFound::new);
         ioService.print(book.toString());
     }
 

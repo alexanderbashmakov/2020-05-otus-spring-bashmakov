@@ -7,15 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.library.domain.Author;
+import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(CommentRepositoryJpa.class)
-@DisplayName("Класс CommentRepositoryJpa:")
-class CommentRepositoryJpaTest {
+@Import(TestRepositoryConfig.class)
+@DisplayName("CommentRepository:")
+class CommentRepositoryTest {
 
     @Autowired
     private CommentRepository commentRepository;
@@ -58,11 +60,11 @@ class CommentRepositoryJpaTest {
     @Test
     @DisplayName("получает все записи из БД getAll()")
     void getAll() {
-        Comment comment1 = Comment.builder().commentStr("Comment1").build();
+        Comment comment1 = createComment("Comment1", "Book1", "Author1", "Genre1");
         em.persist(comment1);
-        Comment comment2 = Comment.builder().commentStr("Comment2").build();
+        Comment comment2 = createComment("Comment2", "Book2", "Author2", "Genre2");
         em.persist(comment2);
-        assertThat(commentRepository.getAll()).containsExactly(comment1, comment2);
+        assertThat(commentRepository.findAll()).containsExactly(comment1, comment2);
     }
 
     @Test
@@ -70,6 +72,17 @@ class CommentRepositoryJpaTest {
     void getById() {
         Comment comment = Comment.builder().commentStr("newComment").build();
         em.persist(comment);
-        assertThat(commentRepository.getById(comment.getId())).get().isEqualToComparingFieldByField(comment);
+        assertThat(commentRepository.findById(comment.getId())).get().isEqualToComparingFieldByField(comment);
+    }
+
+    private Comment createComment(String commentStr, String bookName, String authorName, String genreName) {
+        return Comment.builder()
+                .commentStr(commentStr)
+                .book(Book.builder()
+                        .name(bookName)
+                        .author(Author.builder().name(authorName).build())
+                        .genre(Genre.builder().name(genreName).build())
+                        .build())
+                .build();
     }
 }

@@ -47,7 +47,7 @@ class CommentServiceImplTest {
                 .id(1L)
                 .name("TestBook")
                 .build();
-        when(bookRepository.getById(1L)).thenReturn(Optional.of(book));
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
         String commentStr = "testComment";
         service.create(book.getId(), commentStr);
         verify(commentRepository, times(1)).save(argThat(arg -> arg.getBook().equals(book) && arg.getCommentStr().equals(commentStr)));
@@ -65,7 +65,7 @@ class CommentServiceImplTest {
                 .id(1L)
                 .commentStr("testComment")
                 .build();
-        when(commentRepository.getById(1L)).thenReturn(Optional.of(comment));
+        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
         String commentStr = "updatedComment";
         service.update(1L, commentStr);
         verify(commentRepository, times(1)).save(argThat(arg -> arg.getId() == 1L && arg.getCommentStr().equals(commentStr)));
@@ -98,7 +98,7 @@ class CommentServiceImplTest {
                         )
                         .build()
         );
-        Mockito.when(commentRepository.getAll()).thenReturn(comments);
+        Mockito.when(commentRepository.findAll()).thenReturn(comments);
 
         AsciiTable table = createTable(comments);
         service.printComments();

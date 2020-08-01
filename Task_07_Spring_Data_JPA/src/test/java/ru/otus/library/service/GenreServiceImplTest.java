@@ -57,7 +57,7 @@ class GenreServiceImplTest {
         Mockito.when(messageBundleService.getMessage("genre.name")).thenReturn("genre_name");
 
         List<Genre> genres = List.of(Genre.builder().id(1L).name("genre").build());
-        Mockito.when(repository.getAll()).thenReturn(genres);
+        Mockito.when(repository.findAll()).thenReturn(genres);
         AsciiTable table = new AsciiTable();
 
         table.addRule();

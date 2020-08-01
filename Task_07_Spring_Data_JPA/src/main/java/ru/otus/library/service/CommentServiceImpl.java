@@ -24,14 +24,14 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public void create(Long bookId, String comment) {
-        Book book = bookRepository.getById(bookId).orElseThrow(EntityNotFound::new);
+        Book book = bookRepository.findById(bookId).orElseThrow(EntityNotFound::new);
         commentRepository.save(Comment.builder().book(book).commentStr(comment).build());
     }
 
     @Transactional
     @Override
     public void update(Long id, String commentStr) {
-        Comment comment = commentRepository.getById(id).orElseThrow(EntityNotFound::new);
+        Comment comment = commentRepository.findById(id).orElseThrow(EntityNotFound::new);
         comment.setCommentStr(commentStr);
         commentRepository.save(comment);
     }
@@ -39,16 +39,16 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     @Override
     public void printComments() {
-        printTable(commentRepository.getAll());
+        printTable(commentRepository.findAll());
     }
 
     @Transactional(readOnly = true)
     @Override
     public void printComment(Long id) {
-        printTable(commentRepository.getByBookId(id));
+        printTable(commentRepository.findByBookId(id));
     }
 
-    private void printTable(List<Comment> comments) {
+    private void printTable(Iterable<Comment> comments) {
         AsciiTable table = new AsciiTable();
         table.addRule();
         table.addRow(bundleService.getMessage("comment.id"), bundleService.getMessage("comment.book.name"), bundleService.getMessage("comment.commentStr"));

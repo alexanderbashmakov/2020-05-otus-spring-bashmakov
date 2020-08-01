@@ -13,9 +13,9 @@ import ru.otus.library.exceptions.EntityNotFound;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
-@DisplayName("Класс AuthorRepositoryJpa:")
-class AuthorRepositoryJpaTest {
+@Import(TestRepositoryConfig.class)
+@DisplayName("AuthorRepository:")
+class AuthorRepositoryTest {
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -59,7 +59,7 @@ class AuthorRepositoryJpaTest {
         em.persist(author1);
         Author author2 = Author.builder().name("Author2").build();
         em.persist(author2);
-        assertThat(authorRepository.getAll()).containsExactly(author1, author2);
+        assertThat(authorRepository.findAll()).containsExactly(author1, author2);
     }
 
     @Test
@@ -75,6 +75,6 @@ class AuthorRepositoryJpaTest {
     void getById() {
         Author author = Author.builder().name("newAuthor").build();
         em.persist(author);
-        assertThat(authorRepository.getById(author.getId()).orElse(new Author())).isEqualTo(author);
+        assertThat(authorRepository.findById(author.getId()).orElse(new Author())).isEqualTo(author);
     }
 }

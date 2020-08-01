@@ -77,7 +77,7 @@ class BookServiceImplTest {
                 author(Author.builder().name("testAuthor").build()).
                 genre(Genre.builder().name("testGenre").build()).
                 build());
-        Mockito.when(repository.getAll()).thenReturn(books);
+        Mockito.when(repository.findAll()).thenReturn(books);
         Mockito.when(repository.count()).thenReturn(1L);
         AsciiTable table = new AsciiTable();
 
@@ -103,7 +103,7 @@ class BookServiceImplTest {
                 author(Author.builder().name("testAuthor").build()).
                 genre(Genre.builder().name("testGenre").build()).
                 build();
-        Mockito.when(repository.getById(3L)).thenReturn(Optional.of(book));
+        Mockito.when(repository.findById(3L)).thenReturn(Optional.of(book));
         service.printBook(3L);
         verify(ioService).print(book.toString());
     }

@@ -26,12 +26,11 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     @Override
     public void printAll() {
-        List<Author> authors = authorRepository.getAll();
         AsciiTable table = new AsciiTable();
         table.addRule();
         table.addRow(messages.getMessage("author.id"), messages.getMessage("author.name"));
 
-        authors.forEach(author -> {
+        authorRepository.findAll().forEach(author -> {
             table.addRule();
             table.addRow(author.getId(), author.getName());
         });
