@@ -1,4 +1,4 @@
-package ru.otus.library.domain;
+package ru.otus.library.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Comment implements Identable {
+@Data
+public class CommentDto {
     private String id;
+    private String bookId;
+    private String bookName;
     private Date created;
     private String comment;
 }

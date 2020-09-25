@@ -1,13 +1,18 @@
 package ru.otus.library.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Genre;
-
-import java.util.List;
-import java.util.Optional;
+import ru.otus.library.dto.GenreDto;
 
 @Repository
-public interface GenreRepository extends CrudRepository<Genre, Long> {
-    Optional<Genre> getByName(String name);
+public interface GenreRepository {
+    void create(@NonNull String bookId, Genre genre);
+    void update(@NonNull String id, Genre genre);
+    Page<GenreDto> findGenres(Pageable pageable);
+    Page<GenreDto> findGenresByBookId(Pageable pageable, String bookId);
+    void deleteById(String id);
+    void deleteAll();
 }

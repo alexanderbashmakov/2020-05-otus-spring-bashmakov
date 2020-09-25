@@ -1,15 +1,17 @@
-package ru.otus.library.domain;
+package ru.otus.library.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Genre implements Identable {
+@Data
+public class GenreDto {
     private String id;
+    private String bookId;
+    private String bookName;
     private String name;
 }

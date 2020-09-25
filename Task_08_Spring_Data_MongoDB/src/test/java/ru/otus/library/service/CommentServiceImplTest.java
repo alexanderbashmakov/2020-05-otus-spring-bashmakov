@@ -7,32 +7,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
-import ru.otus.library.domain.Genre;
-import ru.otus.library.repository.BookRepository;
+import ru.otus.library.dto.CommentDto;
 import ru.otus.library.repository.CommentRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("Класс CommentServiceImpl:")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = CommentServiceImpl.class)
 class CommentServiceImplTest {
-
     @Autowired
     private CommentService service;
 
     @MockBean
-    private CommentRepository commentRepository;
-
-    @MockBean
-    private BookRepository bookRepository;
+    private CommentRepository repository;
 
     @MockBean
     private IOService ioService;
@@ -42,86 +39,66 @@ class CommentServiceImplTest {
 
     @DisplayName("сохраняет комментарий")
     @Test
-    void create() {
-        Book book = Book.builder()
-                .id(1L)
-                .name("TestBook")
-                .build();
-        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
-        String commentStr = "testComment";
-        service.create(book.getId(), commentStr);
-        verify(commentRepository, times(1)).save(argThat(arg -> arg.getBook().equals(book) && arg.getCommentStr().equals(commentStr)));
+    void createGenre() {
+        String bookId = "1";
+        Comment comment = Comment.builder().comment("testComment").build();
+        service.create(bookId, comment);
+        verify(repository).create(bookId, comment);
     }
 
-    @DisplayName("обновляет комментарий")
+    @DisplayName("обновляет коммнетарий")
     @Test
-    void saveUpdate() {
-        Comment comment = Comment.builder()
-                .book(Book.builder()
-                        .id(1L)
-                        .name("TestBook")
-                        .build()
-                )
-                .id(1L)
-                .commentStr("testComment")
-                .build();
-        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
-        String commentStr = "updatedComment";
-        service.update(1L, commentStr);
-        verify(commentRepository, times(1)).save(argThat(arg -> arg.getId() == 1L && arg.getCommentStr().equals(commentStr)));
+    void updateGenre() {
+        String id = "1";
+        Comment comment = Comment.builder().comment("testComment").build();
+        service.update(id, comment);
+        verify(repository).update(id, comment);
     }
 
     @DisplayName("выводит все записи")
     @Test
     void printAll() {
         Mockito.when(messageBundleService.getMessage("comment.id")).thenReturn("comment_id");
-        Mockito.when(messageBundleService.getMessage("comment.book.name")).thenReturn("comment_book_name");
-        Mockito.when(messageBundleService.getMessage("comment.commentStr")).thenReturn("comment_commentStr");
+        Mockito.when(messageBundleService.getMessage("comment.commentStr")).thenReturn("comment_comment");
+        Mockito.when(messageBundleService.getMessage("comment.book.name")).thenReturn("book_name");
+        Mockito.when(messageBundleService.getMessage("comment.created")).thenReturn("comment_created");
 
-        List<Comment> comments = List.of(
-                Comment.builder()
-                        .id(1L)
-                        .commentStr("testCommentStr1")
-                        .book(Book.builder()
-                                .id(1L)
-                                .name("testBook1")
-                                .build()
-                        )
-                        .build(),
-                Comment.builder()
-                        .id(2L)
-                        .commentStr("testCommentStr2")
-                        .book(Book.builder()
-                                .id(2L)
-                                .name("testBook2")
-                                .build()
-                        )
-                        .build()
-        );
-        Mockito.when(commentRepository.findAll()).thenReturn(comments);
+        List<CommentDto> comments = List.of(CommentDto.builder().id("1L").bookId("10").bookName("Book").comment("comment").created(new Date()).build());
+        PageRequest pageRequest = PageRequest.of(0, comments.size());
+        PageImpl<CommentDto> page = new PageImpl<>(comments, pageRequest, comments.size());
 
-        AsciiTable table = createTable(comments);
-        service.printComments();
-        verify(ioService).print(table.render());
-    }
 
-    private AsciiTable createTable(List<Comment> comments) {
+        Mockito.when(repository.findComments(pageRequest)).thenReturn(page);
+
         AsciiTable table = new AsciiTable();
-
         table.addRule();
-        table.addRow(messageBundleService.getMessage("comment.id"), messageBundleService.getMessage("comment.book.name"), messageBundleService.getMessage("comment.commentStr"));
+        table.addRow(
+                messageBundleService.getMessage("comment.id"),
+                messageBundleService.getMessage("comment.book.name"),
+                messageBundleService.getMessage("comment.commentStr"),
+                messageBundleService.getMessage("comment.created"));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         comments.forEach(comment -> {
             table.addRule();
-            table.addRow(comment.getId(), comment.getBook().getName(), comment.getCommentStr());
+            table.addRow(comment.getId(), comment.getBookName(), comment.getComment(), sdf.format(comment.getCreated()));
         });
         table.addRule();
-        return table;
+
+        service.printComments(pageRequest);
+        verify(ioService).print(table.render());
     }
 
     @DisplayName("удаляет запись по id")
     @Test
     void deleteById() {
-        service.deleteById(1L);
-        verify(commentRepository, times(1)).deleteById(1L);
+        service.deleteById("1L");
+        verify(repository).deleteById("1L");
+    }
+
+    @DisplayName("удаляет все записи")
+    @Test
+    void deleteAll() {
+        service.deleteAll();
+        verify(repository).deleteAll();
     }
 }

@@ -1,13 +1,16 @@
 package ru.otus.library.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.otus.library.domain.Author;
+import ru.otus.library.dto.AuthorDto;
 
-import java.util.List;
-import java.util.Optional;
-
-@Repository
-public interface AuthorRepository extends CrudRepository<Author, Long> {
-    Optional<Author> getByName(String name);
+public interface AuthorRepository {
+    void create(@NonNull String bookId, Author author);
+    void update(@NonNull String id, Author author);
+    Page<AuthorDto> findAuthors(Pageable pageable);
+    Page<AuthorDto> findAuthorsByBookId(Pageable pageable, String bookId);
+    void deleteById(String id);
+    void deleteAll();
 }

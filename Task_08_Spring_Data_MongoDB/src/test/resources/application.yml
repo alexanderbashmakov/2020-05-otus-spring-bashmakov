@@ -1,8 +1,14 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:library
-    initialization-mode: never
-    data: data-test.sql
-
+  data:
+    mongodb:
+      authentication-database: none
+      port: 27017
+      host: localhost
+      database: library
+  mongodb:
+    embedded:
+      version: 4.0.2
+  mongock:
+    enabled: false
 locale: ru
 

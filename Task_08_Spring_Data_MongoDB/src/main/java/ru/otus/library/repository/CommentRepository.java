@@ -1,18 +1,16 @@
 package ru.otus.library.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.otus.library.domain.Comment;
+import ru.otus.library.dto.CommentDto;
 
-import java.util.List;
-
-@Repository
-public interface CommentRepository extends CrudRepository<Comment, Long> {
-    List<Comment> findByBookId(Long id);
-
-    @EntityGraph(attributePaths = {"book"})
-    @Override
-    Iterable<Comment> findAll();
-
+public interface CommentRepository {
+    void create(@NonNull String bookId, Comment comment);
+    void update(@NonNull String id, Comment comment);
+    Page<CommentDto> findComments(Pageable pageable);
+    Page<CommentDto> findCommentsByBookId(Pageable pageable, String bookId);
+    void deleteById(String id);
+    void deleteAll();
 }

@@ -2,13 +2,20 @@ package ru.otus.library.service;
 
 import de.vandermeer.asciitable.AsciiTable;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
+import ru.otus.library.domain.Genre;
 import ru.otus.library.exceptions.EntityNotFound;
 import ru.otus.library.repository.BookRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,34 +33,48 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public void printAll() {
+    public void printAll(Pageable pageable) {
         AsciiTable table = new AsciiTable();
         table.addRule();
         table.addRow(
                 messages.getMessage("book.id"),
                 messages.getMessage("book.name"),
-                messages.getMessage("book.author"),
-                messages.getMessage("book.genre"));
+                messages.getMessage("book.authors"),
+                messages.getMessage("book.genres"));
 
-        bookRepository.findAll().forEach(book -> {
+        Page<Book> books = bookRepository.findAll(pageable);
+
+        books.forEach(book -> {
+            List<Author> authors = Optional.ofNullable(book.getAuthors()).orElse(new ArrayList<>());
+            List<Genre> genres = Optional.ofNullable(book.getGenres()).orElse(new ArrayList<>());
             table.addRule();
-            table.addRow(book.getId(), book.getName(), book.getAuthor().getName(), book.getGenre().getName());
+            table.addRow(book.getId(), book.getName(),
+                    authors.stream().map(Author::getName).collect(Collectors.joining("; ")),
+                    genres.stream().map(Genre::getName).collect(Collectors.joining("; ")));
         });
+
         table.addRule();
         ioService.print(table.render());
-        ioService.print(String.format("%s: %d", messages.getMessage("book.total"), bookRepository.count()));
+        ioService.print(messages.getMessage("page", books.getNumber() + 1, books.getTotalPages()));
+        ioService.print(messages.getMessage("total", books.getTotalElements()));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public void printBook(Long id) {
+    public void printBook(String id) {
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFound::new);
         ioService.print(book.toString());
     }
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAll() {
+        bookRepository.deleteAll();
     }
 }

@@ -1,80 +1,125 @@
 package ru.otus.library.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import ru.otus.library.domain.Author;
-import ru.otus.library.exceptions.EntityNotFound;
+import ru.otus.library.domain.Book;
+import ru.otus.library.dto.AuthorDto;
+import ru.otus.library.dto.CountDto;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@Import(TestRepositoryConfig.class)
+@DataMongoTest
 @DisplayName("AuthorRepository:")
+@Import(TestRepositoryConfig.class)
 class AuthorRepositoryTest {
 
     @Autowired
     private AuthorRepository authorRepository;
 
     @Autowired
-    private TestEntityManager em;
+    private MongoTemplate mongoTemplate;
+
+    @BeforeEach
+    void setUp() {
+        mongoTemplate.dropCollection(Book.class);
+    }
 
     @Test
-    @DisplayName("добавляет запись в БД save()")
+    @DisplayName("добавляет запись в БД")
     public void insert() {
+        Book book = mongoTemplate.insert(Book.builder()
+                .name("TestBook")
+                .authors(new ArrayList<>())
+                .build());
         Author author = Author.builder().name("TestAuthor").build();
-        authorRepository.save(author);
-        Author createdAuthor = em.find(Author.class, author.getId());
-        assertThat(author).isEqualToComparingFieldByField(createdAuthor);
+        authorRepository.create(book.getId(), author);
+        Book foundBook = mongoTemplate.findOne(new Query(Criteria.where("_id").is(book.getId()).and("authors.name").is(author.getName())), Book.class);
+
+        assert foundBook != null;
+        assertThat(foundBook.getAuthors()).extracting(Author::getName).contains(author.getName());
     }
 
+
     @Test
-    @DisplayName("обновляет запись в БД save()")
+    @DisplayName("обновляет запись в БД")
     public void update() {
+        Book book = mongoTemplate.insert(Book.builder()
+                .name("TestBook")
+                .authors(new ArrayList<>())
+                .build());
         Author author = Author.builder().name("TestAuthor").build();
-        em.persist(author);
-        author.setName("UpdatedName");
-        authorRepository.save(author);
-        assertThat(em.find(Author.class, author.getId())).isEqualToComparingFieldByField(author);
+        authorRepository.create(book.getId(), author);
+        author.setName("UpdatedAuthor");
+        authorRepository.update(author.getId(), author);
+        Book foundBook = mongoTemplate.findOne(new Query(Criteria.where("_id").is(book.getId()).and("authors.name").is(author.getName())), Book.class);
+
+        assert foundBook != null;
+        assertThat(foundBook.getAuthors()).extracting(Author::getName).contains(author.getName());
     }
 
     @Test
-    @DisplayName("удаляет запись из БД deleteById()")
+    @DisplayName("удаляет запись из БД по Id")
     public void deleteById() {
-        Author author = Author.builder().name("AuthorForDelete").build();
-        em.persist(author);
-        em.detach(author);
+        Book book = mongoTemplate.insert(Book.builder()
+                .name("TestBook")
+                .authors(new ArrayList<>())
+                .build());
+        Author author = Author.builder().name("TestAuthor").build();
+        authorRepository.create(book.getId(), author);
+
         authorRepository.deleteById(author.getId());
-        assertThat(em.find(Author.class, author.getId())).isNull();
+        Book foundBook = mongoTemplate.findOne(new Query(Criteria.where("_id").is(book.getId()).and("authors.name").is(author.getName())), Book.class);
+        assertThat(foundBook).isNull();
     }
 
     @Test
-    @DisplayName("получает все записи из БД getAll()")
-    void getAll() {
+    @DisplayName("удаляет все записи")
+    public void deleteAll() {
+        Book book1 = mongoTemplate.insert(Book.builder()
+                .name("TestBook1")
+                .authors(new ArrayList<>())
+                .build());
         Author author1 = Author.builder().name("Author1").build();
-        em.persist(author1);
+        authorRepository.create(book1.getId(), author1);
+        Book book2 = mongoTemplate.insert(Book.builder()
+                .name("TestBook2")
+                .authors(new ArrayList<>())
+                .build());
         Author author2 = Author.builder().name("Author2").build();
-        em.persist(author2);
-        assertThat(authorRepository.findAll()).containsExactly(author1, author2);
+        authorRepository.create(book2.getId(), author2);
+
+        authorRepository.deleteAll();
+
+        Aggregation aggregation = Aggregation.newAggregation(Aggregation.unwind("authors"), Aggregation.count().as("total"));
+        CountDto countDto = mongoTemplate.aggregate(aggregation, Book.class, CountDto.class).getUniqueMappedResult();
+        assertThat(countDto).isNull();
     }
 
     @Test
-    @DisplayName("получает запись по name из БД getByName()")
-    void getByName() {
-        Author author = Author.builder().name("newAuthor").build();
-        em.persist(author);
-        assertThat(authorRepository.getByName("newAuthor").orElse(new Author())).isEqualTo(author);
-    }
-
-    @Test
-    @DisplayName("получает запись по id из БД getById()")
-    void getById() {
-        Author author = Author.builder().name("newAuthor").build();
-        em.persist(author);
-        assertThat(authorRepository.findById(author.getId()).orElse(new Author())).isEqualTo(author);
+    @DisplayName("получает все записи из БД")
+    void getAll() {
+        Book book = mongoTemplate.insert(Book.builder()
+                .name("TestBook")
+                .authors(new ArrayList<>())
+                .build());
+        Author author1 = Author.builder().name("Author1").build();
+        authorRepository.create(book.getId(), author1);
+        Author author2 = Author.builder().name("Author2").build();
+        authorRepository.create(book.getId(), author2);
+        Page<AuthorDto> page = authorRepository.findAuthors(PageRequest.of(0, 5));
+        assertThat(page.getContent()).extracting(AuthorDto::getName).contains(author1.getName()).contains(author2.getName());
     }
 }
