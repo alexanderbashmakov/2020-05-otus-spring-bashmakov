@@ -35,7 +35,7 @@ class AuthorServiceImplTest {
     @MockBean
     private MessageBundleService messageBundleService;
 
-    @DisplayName("сохраняет автора")
+    @DisplayName("сохраняет автора create()")
     @Test
     void createAuthor() {
         String bookId = "1";
@@ -44,7 +44,7 @@ class AuthorServiceImplTest {
         verify(repository).create(bookId, author);
     }
 
-    @DisplayName("обновляет автора")
+    @DisplayName("обновляет автора update()")
     @Test
     void updateAuthor() {
         String id = "1";
@@ -53,7 +53,7 @@ class AuthorServiceImplTest {
         verify(repository).update(id, author);
     }
 
-    @DisplayName("выводит все записи")
+    @DisplayName("выводит все записи printAll()")
     @Test
     void printAll() {
         Mockito.when(messageBundleService.getMessage("author.id")).thenReturn("author_id");
@@ -80,14 +80,14 @@ class AuthorServiceImplTest {
         verify(ioService).print(table.render());
     }
 
-    @DisplayName("удаляет запись по id")
+    @DisplayName("удаляет запись по id deleteById()")
     @Test
     void deleteById() {
         service.deleteById("1L");
         verify(repository).deleteById("1L");
     }
 
-    @DisplayName("удаляет все записи")
+    @DisplayName("удаляет все записи deleteAll()")
     @Test
     void deleteAll() {
         service.deleteAll();
