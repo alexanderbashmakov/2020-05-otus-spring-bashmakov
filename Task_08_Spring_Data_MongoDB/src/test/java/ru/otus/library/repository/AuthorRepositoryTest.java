@@ -38,7 +38,7 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    @DisplayName("добавляет запись в БД")
+    @DisplayName("добавляет запись в БД create()")
     public void insert() {
         Book book = mongoTemplate.insert(Book.builder()
                 .name("TestBook")
@@ -54,7 +54,7 @@ class AuthorRepositoryTest {
 
 
     @Test
-    @DisplayName("обновляет запись в БД")
+    @DisplayName("обновляет запись в БД update()")
     public void update() {
         Book book = mongoTemplate.insert(Book.builder()
                 .name("TestBook")
@@ -71,7 +71,7 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    @DisplayName("удаляет запись из БД по Id")
+    @DisplayName("удаляет запись из БД по Id deleteById()")
     public void deleteById() {
         Book book = mongoTemplate.insert(Book.builder()
                 .name("TestBook")
@@ -86,7 +86,7 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    @DisplayName("удаляет все записи")
+    @DisplayName("удаляет все записи deleteAll()")
     public void deleteAll() {
         Book book1 = mongoTemplate.insert(Book.builder()
                 .name("TestBook1")
@@ -109,7 +109,7 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    @DisplayName("получает все записи из БД")
+    @DisplayName("получает все записи из БД findAuthors()")
     void getAll() {
         Book book = mongoTemplate.insert(Book.builder()
                 .name("TestBook")

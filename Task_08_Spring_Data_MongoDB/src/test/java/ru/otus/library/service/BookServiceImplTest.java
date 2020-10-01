@@ -96,7 +96,7 @@ class BookServiceImplTest {
         verify(ioService).print(table.render());
     }
 
-    @DisplayName("выводит запись по id")
+    @DisplayName("выводит запись по id printBook()")
     @Test
     void printBook() {
         Book book = Book.builder()
@@ -111,14 +111,14 @@ class BookServiceImplTest {
         verify(ioService).print(book.toString());
     }
 
-    @DisplayName("удаляет запись по id")
+    @DisplayName("удаляет запись по id deleteById()")
     @Test
     void deleteById() {
         service.deleteById("1L");
         verify(repository, times(1)).deleteById("1L");
     }
 
-    @DisplayName("удаляет все записи")
+    @DisplayName("удаляет все записи deleteAll()")
     @Test
     void deleteAll() {
         service.deleteAll();

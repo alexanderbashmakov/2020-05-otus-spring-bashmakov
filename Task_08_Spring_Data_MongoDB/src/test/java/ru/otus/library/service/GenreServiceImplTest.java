@@ -35,7 +35,7 @@ class GenreServiceImplTest {
     @MockBean
     private MessageBundleService messageBundleService;
 
-    @DisplayName("сохраняет жанр")
+    @DisplayName("сохраняет жанр create()")
     @Test
     void createGenre() {
         String bookId = "1";
@@ -44,7 +44,7 @@ class GenreServiceImplTest {
         verify(repository).create(bookId, genre);
     }
 
-    @DisplayName("обновляет жанр")
+    @DisplayName("обновляет жанр update()")
     @Test
     void updateGenre() {
         String id = "1";
@@ -53,7 +53,7 @@ class GenreServiceImplTest {
         verify(repository).update(id, genre);
     }
 
-    @DisplayName("выводит все записи")
+    @DisplayName("выводит все записи printAll()")
     @Test
     void printAll() {
         Mockito.when(messageBundleService.getMessage("genre.id")).thenReturn("genre_id");
@@ -80,14 +80,14 @@ class GenreServiceImplTest {
         verify(ioService).print(table.render());
     }
 
-    @DisplayName("удаляет запись по id")
+    @DisplayName("удаляет запись по id deleteById()")
     @Test
     void deleteById() {
         service.deleteById("1L");
         verify(repository).deleteById("1L");
     }
 
-    @DisplayName("удаляет все записи")
+    @DisplayName("удаляет все записи deleteAll()")
     @Test
     void deleteAll() {
         service.deleteAll();
