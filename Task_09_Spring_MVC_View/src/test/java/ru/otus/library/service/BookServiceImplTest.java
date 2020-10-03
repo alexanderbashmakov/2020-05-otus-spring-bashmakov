@@ -1,6 +1,5 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,22 +77,6 @@ class BookServiceImplTest {
         PageImpl<Book> page = new PageImpl<>(books, PageRequest.of(0, books.size()), books.size());
         Mockito.when(repository.findAll(any(Pageable.class))).thenReturn(page);
         Mockito.when(repository.count()).thenReturn(1L);
-        AsciiTable table = new AsciiTable();
-
-        table.addRule();
-        table.addRow("book_id", "book_name", "authors", "genres");
-        page.forEach(book -> {
-            List<Author> authors = Optional.ofNullable(book.getAuthors()).orElse(new LinkedList<>());
-            List<Genre> genres = Optional.ofNullable(book.getGenres()).orElse(new LinkedList<>());
-            table.addRule();
-            table.addRow(book.getId(), book.getName(),
-                    authors.stream().map(Author::getName).collect(Collectors.joining(", ")),
-                    genres.stream().map(Genre::getName).collect(Collectors.joining(", ")));
-        });
-        table.addRule();
-
-        service.printAll(PageRequest.of(0, page.getNumberOfElements()));
-        verify(ioService).print(table.render());
     }
 
     @DisplayName("выводит запись по id printBook()")

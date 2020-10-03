@@ -1,20 +1,15 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
-import ru.otus.library.domain.Genre;
+import ru.otus.library.dto.BookDto;
 import ru.otus.library.exceptions.EntityNotFound;
 import ru.otus.library.repository.BookRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,29 +29,19 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public void printAll(Pageable pageable) {
-        AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow(
-                messages.getMessage("book.id"),
-                messages.getMessage("book.name"),
-                messages.getMessage("book.authors"),
-                messages.getMessage("book.genres"));
+    }
 
-        Page<Book> books = bookRepository.findAll(pageable);
+    @Transactional
+    @Override
+    public BookDto findById(String bookId){
+        Book book = bookRepository.findById(bookId).orElseThrow(EntityNotFound::new);
+        return BookDto.toDto(book);
+    }
 
-        books.forEach(book -> {
-            List<Author> authors = Optional.ofNullable(book.getAuthors()).orElse(new ArrayList<>());
-            List<Genre> genres = Optional.ofNullable(book.getGenres()).orElse(new ArrayList<>());
-            table.addRule();
-            table.addRow(book.getId(), book.getName(),
-                    authors.stream().map(Author::getName).collect(Collectors.joining("; ")),
-                    genres.stream().map(Genre::getName).collect(Collectors.joining("; ")));
-        });
-
-        table.addRule();
-        ioService.print(table.render());
-        ioService.print(messages.getMessage("page", books.getNumber() + 1, books.getTotalPages()));
-        ioService.print(messages.getMessage("total", books.getTotalElements()));
+    @Transactional
+    @Override
+    public List<BookDto> findAll(){
+        return bookRepository.findAll().stream().map(BookDto::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

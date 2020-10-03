@@ -1,6 +1,5 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
@@ -44,18 +43,6 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     @Override
     public void printAll(Page<AuthorDto> page) {
-        AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow(messages.getMessage("author.id"), messages.getMessage("author.name"), messages.getMessage("book.name"));
-
-        page.getContent().forEach(author -> {
-            table.addRule();
-            table.addRow(author.getId(), author.getName(), author.getBookName());
-        });
-        table.addRule();
-        ioService.print(table.render());
-        ioService.print(messages.getMessage("page", page.getNumber() + 1, page.getTotalPages()));
-        ioService.print(messages.getMessage("total", page.getTotalElements()));
     }
 
     @Transactional

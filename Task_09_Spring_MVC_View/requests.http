@@ -7,5 +7,24 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/person
+GET http://localhost:8080/book
+###
+DELETE http://localhost:8080/book/5f77f464c90ea356e4b46978
+###
+DELETE http://localhost:8080/book
+###
+POST http://localhost:8080/book
+Content-Type: application/json
 
+{
+  "name": "New book",
+  "authors": [
+    "Unknown",
+    "Lermontov"
+  ],
+  "genres": [
+    "Tragedy",
+    "Roman"
+  ]
+
+}

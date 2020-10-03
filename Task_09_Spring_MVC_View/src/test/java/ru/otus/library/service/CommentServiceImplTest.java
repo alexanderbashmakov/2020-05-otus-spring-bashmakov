@@ -1,6 +1,5 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,22 +69,6 @@ class CommentServiceImplTest {
 
         Mockito.when(repository.findComments(pageRequest)).thenReturn(page);
 
-        AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow(
-                messageBundleService.getMessage("comment.id"),
-                messageBundleService.getMessage("comment.book.name"),
-                messageBundleService.getMessage("comment.commentStr"),
-                messageBundleService.getMessage("comment.created"));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        comments.forEach(comment -> {
-            table.addRule();
-            table.addRow(comment.getId(), comment.getBookName(), comment.getComment(), sdf.format(comment.getCreated()));
-        });
-        table.addRule();
-
-        service.printComments(pageRequest);
-        verify(ioService).print(table.render());
     }
 
     @DisplayName("удаляет запись по id")

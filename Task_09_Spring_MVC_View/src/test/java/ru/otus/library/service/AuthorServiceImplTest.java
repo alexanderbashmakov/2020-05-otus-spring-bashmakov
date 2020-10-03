@@ -1,6 +1,5 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,28 +55,6 @@ class AuthorServiceImplTest {
     @DisplayName("выводит все записи printAll()")
     @Test
     void printAll() {
-        Mockito.when(messageBundleService.getMessage("author.id")).thenReturn("author_id");
-        Mockito.when(messageBundleService.getMessage("author.name")).thenReturn("author_name");
-        Mockito.when(messageBundleService.getMessage("book.name")).thenReturn("book_name");
-
-        List<AuthorDto> authors = List.of(AuthorDto.builder().id("1L").bookId("10").bookName("Book").name("author").build());
-        PageRequest pageRequest = PageRequest.of(0, authors.size());
-        PageImpl<AuthorDto> page = new PageImpl<>(authors, pageRequest, authors.size());
-
-
-        Mockito.when(repository.findAuthors(pageRequest)).thenReturn(page);
-
-        AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow(messageBundleService.getMessage("author.id"), messageBundleService.getMessage("author.name"), messageBundleService.getMessage("book.name"));
-        authors.forEach(author -> {
-            table.addRule();
-            table.addRow(author.getId(), author.getName(), author.getBookName());
-        });
-        table.addRule();
-
-        service.printAll(pageRequest);
-        verify(ioService).print(table.render());
     }
 
     @DisplayName("удаляет запись по id deleteById()")

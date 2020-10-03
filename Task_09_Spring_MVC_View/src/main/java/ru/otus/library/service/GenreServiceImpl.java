@@ -1,6 +1,5 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,18 +32,6 @@ public class GenreServiceImpl implements GenreService {
     @Transactional(readOnly = true)
     @Override
     public void printAll(Page<GenreDto> page) {
-        AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow(messages.getMessage("genre.id"), messages.getMessage("genre.name"), messages.getMessage("book.name"));
-
-        page.getContent().forEach(genre -> {
-            table.addRule();
-            table.addRow(genre.getId(), genre.getName(), genre.getBookName());
-        });
-        table.addRule();
-        ioService.print(table.render());
-        ioService.print(messages.getMessage("page", page.getNumber() + 1, page.getTotalPages()));
-        ioService.print(messages.getMessage("total", page.getTotalElements()));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package ru.otus.library.service;
 
-import de.vandermeer.asciitable.AsciiTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,17 +66,6 @@ class GenreServiceImplTest {
 
         Mockito.when(repository.findGenres(pageRequest)).thenReturn(page);
 
-        AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow(messageBundleService.getMessage("genre.id"), messageBundleService.getMessage("genre.name"), messageBundleService.getMessage("book.name"));
-        genres.forEach(genre -> {
-            table.addRule();
-            table.addRow(genre.getId(), genre.getName(), genre.getBookName());
-        });
-        table.addRule();
-
-        service.printAll(pageRequest);
-        verify(ioService).print(table.render());
     }
 
     @DisplayName("удаляет запись по id deleteById()")
