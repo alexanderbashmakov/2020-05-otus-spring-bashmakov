@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.dto.GenreDto;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Repository
 public class GenreRepositoryImpl implements GenreRepository {
@@ -23,6 +25,11 @@ public class GenreRepositoryImpl implements GenreRepository {
     @Override
     public void update(@NonNull String id, Genre genre) {
         bookOperations.updateElement(id, genre, ARRAY_NAME);
+    }
+
+    @Override
+    public Optional<GenreDto> findById(@NonNull String id) {
+        return Optional.ofNullable(bookOperations.findById(id, GenreDto.class, ARRAY_NAME));
     }
 
     @Override

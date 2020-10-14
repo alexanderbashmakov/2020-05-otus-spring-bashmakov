@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Author;
 import ru.otus.library.dto.AuthorDto;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -25,12 +27,17 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
+    public Optional<AuthorDto> findById(String id){
+        return Optional.ofNullable(bookOperations.findById(id, AuthorDto.class, ARRAY_NAME));
+    }
+
+    @Override
     public Page<AuthorDto> findAuthors(Pageable pageable) {
         return bookOperations.findElements(pageable, null, AuthorDto.class, ARRAY_NAME);
     }
 
     @Override
-    public Page<AuthorDto> findAuthorsByBookId(Pageable pageable, String bookId) {
+    public Page<AuthorDto> findAuthors(Pageable pageable, String bookId) {
         return bookOperations.findElements(pageable, bookId, AuthorDto.class, ARRAY_NAME);
     }
 

@@ -10,13 +10,13 @@ import ru.otus.library.domain.Author;
 import ru.otus.library.dto.AuthorDto;
 import ru.otus.library.repository.AuthorRepository;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
-    private final IOService ioService;
-    private final MessageBundleService messages;
 
     @Transactional
     @Override
@@ -30,19 +30,16 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.update(id, author);
     }
 
+    @Transactional
     @Override
-    public void printAll(Pageable pageable) {
-        printAll(authorRepository.findAuthors(pageable));
+    public Page<AuthorDto> findAllByBook(Pageable pageable, String bookId) {
+        return authorRepository.findAuthors(pageable, bookId);
     }
 
+    @Transactional
     @Override
-    public void printAll(Pageable pageable, String bookId) {
-        printAll(authorRepository.findAuthorsByBookId(pageable, bookId));
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public void printAll(Page<AuthorDto> page) {
+    public Optional<AuthorDto> findById(String id) {
+        return authorRepository.findById(id);
     }
 
     @Transactional

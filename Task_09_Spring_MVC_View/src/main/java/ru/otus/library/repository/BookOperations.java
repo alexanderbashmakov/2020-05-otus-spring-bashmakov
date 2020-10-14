@@ -61,6 +61,19 @@ public class BookOperations {
         return new PageImpl<>(result, pageable, countDto.getTotal());
     }
 
+    public <T> T findById(String id, Class<T> dtoClass, String array) {
+        return mongoTemplate.aggregate(Aggregation.newAggregation(
+                Aggregation.unwind(array),
+                Aggregation.addFields()
+                        .addFieldWithValue(array + ".bookId", "$_id")
+                        .addFieldWithValue(array + ".bookName", "$name")
+                        .build(),
+                Aggregation.replaceRoot(array),
+                Aggregation.match(Criteria.where("_id").is(id))),
+                Book.class, dtoClass
+        ).getUniqueMappedResult();
+    }
+
     public void deleteById(String id, String array) {
         Update update = new Update().pull(array, Query.query(Criteria.where("_id").is(id)));
         mongoTemplate.updateMulti(new Query(), update, Book.class);

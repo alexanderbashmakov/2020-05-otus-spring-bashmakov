@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.otus.library.domain.Author;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +15,20 @@ public class AuthorDto {
     private String bookId;
     private String bookName;
     private String name;
+
+    public static AuthorDto toDto(Author author, String bookId) {
+        return new AuthorDto(
+                author.getId(),
+                bookId,
+                "",
+                author.getName());
+    }
+
+    public static Author toDomainObject(AuthorDto authorDto) {
+        return Author.builder()
+                .id(authorDto.getId())
+                .name(authorDto.getName())
+                .build();
+    }
+
 }

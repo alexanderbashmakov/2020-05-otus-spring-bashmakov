@@ -10,13 +10,13 @@ import ru.otus.library.domain.Genre;
 import ru.otus.library.dto.GenreDto;
 import ru.otus.library.repository.GenreRepository;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
-    private final IOService ioService;
-    private final MessageBundleService messages;
 
     @Transactional
     @Override
@@ -24,24 +24,22 @@ public class GenreServiceImpl implements GenreService {
         genreRepository.create(bookId, genre);
     }
 
+    @Transactional
     @Override
     public void update(@NonNull String id, Genre genre) {
         genreRepository.update(id, genre);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public void printAll(Page<GenreDto> page) {
+    public Page<GenreDto> findAllByBook(Pageable pageable, String bookId) {
+        return genreRepository.findGenresByBookId(pageable, bookId);
     }
 
+    @Transactional
     @Override
-    public void printAll(Pageable pageable) {
-        printAll(genreRepository.findGenres(pageable));
-    }
-
-    @Override
-    public void printAll(Pageable pageable, String bookId) {
-        printAll(genreRepository.findGenresByBookId(pageable, bookId));
+    public Optional<GenreDto> findById(String id) {
+        return genreRepository.findById(id);
     }
 
     @Transactional
@@ -50,6 +48,7 @@ public class GenreServiceImpl implements GenreService {
         genreRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public void deleteAll() {
         genreRepository.deleteAll();
