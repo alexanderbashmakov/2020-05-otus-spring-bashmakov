@@ -31,7 +31,10 @@ public class BookDto {
     }
 
     public static Book toDomainObject(BookDto bookDto) {
+        if (bookDto.getAuthors() == null) {bookDto.setAuthors(List.of());}
+        if (bookDto.getGenres() == null) {bookDto.setGenres(List.of());}
         return Book.builder()
+                .id(bookDto.getId())
                 .name(bookDto.getName())
                 .authors(
                         bookDto.getAuthors().stream().map(author ->

@@ -1,6 +1,7 @@
 package ru.otus.library.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,9 +9,6 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.dto.BookDto;
 import ru.otus.library.exceptions.EntityNotFound;
 import ru.otus.library.repository.BookRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,11 +24,6 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public void printAll(Pageable pageable) {
-    }
-
     @Transactional
     @Override
     public BookDto findById(String bookId){
@@ -40,8 +33,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public List<BookDto> findAll(){
-        return bookRepository.findAll().stream().map(BookDto::toDto).collect(Collectors.toList());
+    public Page<BookDto> findAll(Pageable pageable){
+        return bookRepository.findAll(pageable).map(BookDto::toDto);
     }
 
     @Transactional(readOnly = true)

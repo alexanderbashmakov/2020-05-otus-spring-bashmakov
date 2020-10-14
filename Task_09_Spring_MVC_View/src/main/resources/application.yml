@@ -12,7 +12,7 @@ spring:
       - ru.otus.library.changelogs
     enabled: true
     runner-type: InitializingBean
-locale: en
+locale: ru
 logging:
   level:
     ROOT: ERROR

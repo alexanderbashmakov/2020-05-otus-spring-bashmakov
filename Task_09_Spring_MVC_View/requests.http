@@ -1,13 +1,4 @@
-POST http://localhost:8080/person
-Content-Type: application/json
-
-{
-  "id": "1",
-  "name": "Gogol'"
-}
-
-###
-GET http://localhost:8080/book
+GET http://localhost:8080/book?page=0&size=3
 ###
 DELETE http://localhost:8080/book/5f77f464c90ea356e4b46978
 ###
@@ -17,7 +8,7 @@ POST http://localhost:8080/book
 Content-Type: application/json
 
 {
-  "name": "New book",
+  "name": "New book2",
   "authors": [
     "Unknown",
     "Lermontov"
