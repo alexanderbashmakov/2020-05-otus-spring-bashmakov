@@ -6,20 +6,52 @@
 <div class="container">
     <div th:insert="header :: localization"></div>
     <h1 th:text="#{genre.info}">Genre Info</h1>
-    <form id="edit-form" th:action="@{/genre(bookId=${bookId}, id=${genre.id})}" th:method="post"
-          action="genreList.html">
+    <form id="edit-form" action="genreList.html">
         <div class="form-group">
             <label for="id-input">ID</label>
             <input type="text" class="form-control" id="id-input" readonly="readonly" th:value="${genre.id}" value="1">
         </div>
         <div class="form-group">
-            <label th:text="#{genre.name}" for="holder-input">Name</label>
-            <input type="text" class="form-control" id="holder-input" th:field="${genre.name}">
+            <label th:text="#{genre.name}" for="genre-input">Name</label>
+            <input type="text" class="form-control" id="genre-input" th:field="${genre.name}">
         </div>
         <div class="form-group">
             <button class="btn btn-primary" type="submit" th:text="#{button.save}">Save</button>
         </div>
     </form>
 </div>
+<script th:inline="javascript">
+    const bookId = [[${bookId}]];
+    $(document).ready(function(){
+        $("#edit-form").submit(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault()
+
+            const genre = {};
+            genre["name"] = $("#genre-input").val()
+            const id = $("#id-input").val()
+            let type = "post"
+            if (id != null && id.length > 0) {
+                type = "put"
+            }
+            console.log("id", id)
+            console.log("type", type)
+            $.ajax({
+                type: type,
+                contentType: "application/json",
+                url: "api/genre/" + (type === "put" ? id : bookId),
+                data: JSON.stringify(genre),
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                    window.location.replace("/genres?bookId=" + bookId)
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e)
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>

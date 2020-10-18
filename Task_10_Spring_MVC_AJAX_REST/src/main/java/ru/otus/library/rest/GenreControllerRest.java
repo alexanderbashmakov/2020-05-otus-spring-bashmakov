@@ -1,17 +1,10 @@
 package ru.otus.library.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import ru.otus.library.controller.PageUtils;
-import ru.otus.library.domain.Genre;
 import ru.otus.library.dto.GenreDto;
-import ru.otus.library.exceptions.EntityNotFound;
 import ru.otus.library.service.GenreService;
 
 import java.util.List;
@@ -27,34 +20,21 @@ public class GenreControllerRest {
         return service.findAllByBook(bookId);
     }
 
-/*    @GetMapping(value = "/genre")
-    public ModelAndView getAuthor(@RequestParam(value = "bookId", required = false) String bookId, @RequestParam(value = "id", required = false) String id) {
-        ModelAndView mvc = new ModelAndView("genre");
-
-        if (id != null && !id.isEmpty()) {
-            mvc.addObject("genre", service.findById(id).orElseThrow(EntityNotFound::new));
-        } else {
-            mvc.addObject("genre", new GenreDto());
-        }
-        mvc.addObject("bookId", bookId);
-        return mvc;
+    @PostMapping(value = "/api/genre/{bookId}")
+    public ResponseEntity<GenreDto> genreSave(@PathVariable String bookId, @RequestBody GenreDto genre) {
+        service.create(bookId, GenreDto.toDomainObject(genre));
+        return ResponseEntity.status(HttpStatus.CREATED).body(genre);
     }
 
-    @PostMapping(value = "/genre")
-    public String editAuthor(@RequestParam(value = "bookId") String bookId, @RequestParam(value = "id", required = false) String id, GenreDto genreDto) {
-        Genre genre = GenreDto.toDomainObject(genreDto);
-        if (id.isEmpty()) {
-            service.create(genreDto.getBookId(), genre);
-        } else {
-            service.update(id, genre);
-        }
-        return String.format("redirect:/genres?bookId=%s", bookId);
+    @PutMapping(value = "/api/genre/{id}")
+    public ResponseEntity<GenreDto> genreUpdate(@PathVariable String id, @RequestBody GenreDto genre){
+        service.update(id, GenreDto.toDomainObject(genre));
+        return ResponseEntity.ok(genre);
     }
 
-    @PostMapping("/genre-delete")
-    public String deleteById(@RequestParam(value = "bookId") String bookId, @RequestParam(value = "id", required = true) String id) {
+    @DeleteMapping(value = "/api/genre/{id}")
+    public ResponseEntity<Void> deleteGenre(@PathVariable String id) {
         service.deleteById(id);
-        return String.format("redirect:/genres?bookId=%s", bookId);
+        return ResponseEntity.ok().build();
     }
-*/
 }

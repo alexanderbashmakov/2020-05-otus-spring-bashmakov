@@ -20,19 +20,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="author : ${authors}">
-            <td th:text="${author.id}">1</td>
-            <td th:text="${author.name}">John Doe</td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-info btn-sm" role="button" th:text="#{button.edit}"
-                       th:href="@{/author(bookId=${bookId},id=${author.id})}" href="author.html">Edit</a>
-                    <form id="delete" th:action="@{/author-delete(bookId=${bookId},id=${author.id})}" th:method="post" action="authorList.html">
-                        <button class="btn btn-danger btn-sm" type="submit" th:text="#{button.delete}">Delete</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
         </tbody>
 
     </table>
@@ -43,5 +30,43 @@
         <button class="btn btn-secondary" onclick="window.location.href='/'" type="button" th:text="#{button.back}">Back</button>
     </div>
 </div>
+<script th:inline="javascript">
+    const bookId = [[${bookId}]];
+    $(document).ready(fillTable())
+    function fillTable() {
+        $.get('/api/authors/' + bookId).done(function (authors) {
+            $('tbody').children().remove()
+            authors.forEach(function (author) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${author.id}</td>
+                        <td>${author.name}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-info btn-sm" role="button" href="/author?bookId=${bookId}&id=${author.id}">[(#{button.edit})]</a>
+                                <form id="delete-form">
+                                    <button id="btn-delete" onclick="onAuthorDelete('${author.id}')" class="btn btn-danger btn-sm" type="button">[(#{button.delete})]</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+    function onAuthorDelete(val) {
+        $.ajax({
+            type: "DELETE",
+            url: "api/author/" + val,
+            success: function (data) {
+                fillTable()
+                console.log(data)
+            },
+            error: function (e) {
+                console.log(e)
+            }
+        })
+    }
+</script>
 </body>
 </html>

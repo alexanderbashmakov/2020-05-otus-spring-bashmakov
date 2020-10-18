@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.otus</groupId>
-    <artifactId>Task_09_Spring_MVC_View</artifactId>
+    <artifactId>Task_10_Spring_MVC_AJAX_REST</artifactId>
     <version>1.0</version>
 
     <!-- Наследуем зависимости от глобального родителя  -->
@@ -118,6 +118,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.5.1</version>
         </dependency>
     </dependencies>
 
