@@ -15,7 +15,7 @@ public class GenreControllerRest {
 
     private final GenreService service;
 
-    @GetMapping(value = "/api/genres/{bookId}")
+    @GetMapping(value = "/api/genre/{bookId}")
     public List<GenreDto> genreList(@PathVariable String bookId) {
         return service.findAllByBook(bookId);
     }
@@ -33,7 +33,7 @@ public class GenreControllerRest {
     }
 
     @DeleteMapping(value = "/api/genre/{id}")
-    public ResponseEntity<Void> deleteGenre(@PathVariable String id) {
+    public ResponseEntity<Void> genreDelete(@PathVariable String id) {
         service.deleteById(id);
         return ResponseEntity.ok().build();
     }

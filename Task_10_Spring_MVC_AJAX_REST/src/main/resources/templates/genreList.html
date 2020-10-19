@@ -33,7 +33,7 @@
     const bookId = [[${bookId}]];
     $(document).ready(fillTable())
     function fillTable() {
-        $.get('/api/genres/' + bookId).done(function (genres) {
+        $.get('/api/genre/' + bookId).done(function (genres) {
             $('tbody').children().remove()
             genres.forEach(function (genre) {
                 $('tbody').append(`

@@ -34,7 +34,7 @@
     const bookId = [[${bookId}]];
     $(document).ready(fillTable())
     function fillTable() {
-        $.get('/api/authors/' + bookId).done(function (authors) {
+        $.get('/api/author/' + bookId).done(function (authors) {
             $('tbody').children().remove()
             authors.forEach(function (author) {
                 $('tbody').append(`
