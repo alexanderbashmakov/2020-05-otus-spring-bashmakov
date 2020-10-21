@@ -1,21 +1,35 @@
-GET http://localhost:8080/book?page=0&size=3
+GET http://localhost:8080/api/book
 ###
-DELETE http://localhost:8080/book/5f77f464c90ea356e4b46978
-###
-DELETE http://localhost:8080/book
-###
-POST http://localhost:8080/book
+POST http://localhost:8080/api/book
 Content-Type: application/json
 
 {
-  "name": "New book2",
+  "name": "New book3",
   "authors": [
-    "Unknown",
-    "Lermontov"
+    "Unknown2",
+    "Lermontov1"
   ],
   "genres": [
-    "Tragedy",
-    "Roman"
+    "Tragedy3",
+    "Roman4"
   ]
-
 }
+###
+PUT http://localhost:8080/api/book/5f8ffc6f67361e7eab103908
+Content-Type: application/json
+
+{
+  "name": "New book4",
+  "authors": [
+    "Unknown2",
+    "Lermontov1"
+  ],
+  "genres": [
+    "Tragedy3",
+    "Roman4"
+  ]
+}
+###
+DELETE http://localhost:8080/api/book/5f901db1be55c7609c60af37
+###
+GET http://localhost:8080/api/book/5f8ff0491b6da5031bd78e0d

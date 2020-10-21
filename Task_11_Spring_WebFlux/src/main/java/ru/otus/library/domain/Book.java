@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
+@Document(collection = "books")
 public class Book {
     @Id
     private String id;
+
     private String name;
     private List<Author> authors;
     private List<Genre> genres;
-    private List<Comment> comments;
 }

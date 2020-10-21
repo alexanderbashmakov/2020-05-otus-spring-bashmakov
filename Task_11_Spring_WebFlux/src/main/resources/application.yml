@@ -7,6 +7,9 @@ spring:
       port: 27017
       host: localhost
       database: library
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
   mongock:
     change-logs-scan-package:
       - ru.otus.library.changelogs
