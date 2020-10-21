@@ -1,6 +1,4 @@
 spring:
-  messages:
-    basename: bundle
   data:
     mongodb:
       authentication-database: none
