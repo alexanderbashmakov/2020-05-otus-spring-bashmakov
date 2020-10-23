@@ -1,0 +1,35 @@
+GET http://localhost:8080/api/book
+###
+POST http://localhost:8080/api/book
+Content-Type: application/json
+
+{
+  "name": "New book3",
+  "authors": [
+    "Unknown2",
+    "Lermontov1"
+  ],
+  "genres": [
+    "Tragedy3",
+    "Roman4"
+  ]
+}
+###
+PUT http://localhost:8080/api/book/5f8ffc6f67361e7eab103908
+Content-Type: application/json
+
+{
+  "name": "New book4",
+  "authors": [
+    "Unknown2",
+    "Lermontov1"
+  ],
+  "genres": [
+    "Tragedy3",
+    "Roman4"
+  ]
+}
+###
+DELETE http://localhost:8080/api/book/5f901db1be55c7609c60af37
+###
+GET http://localhost:8080/api/book/5f8ff0491b6da5031bd78e0d

@@ -1,0 +1,20 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: none
+      port: 27017
+      host: localhost
+      database: library
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  mongock:
+    change-logs-scan-package:
+      - ru.otus.library.changelogs
+    enabled: true
+    runner-type: InitializingBean
+locale: ru
+logging:
+  level:
+    ROOT: ERROR
+
