@@ -3,11 +3,9 @@ package ru.otus.library.changelogs;
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoDatabase;
-import ru.otus.library.domain.Author;
-import ru.otus.library.domain.Book;
-import ru.otus.library.domain.Comment;
-import ru.otus.library.domain.Genre;
+import ru.otus.library.domain.*;
 import ru.otus.library.repository.BookRepository;
+import ru.otus.library.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -23,9 +21,31 @@ public class MongoDBInit {
     }
 
     @ChangeSet(order = "002", id = "init", runAlways = true, author = "abashmakov")
-    public void initDB(BookRepository bookRepository){
+    public void initBook(BookRepository bookRepository){
         bookRepository.insert(initBook("Famous Book", new String[] {"Talent", "Pushkin"}, new String[] {"Lyrics", "Roman"}, new String[]{}));
         bookRepository.insert(initBook("Incredible Book", new String[] {"Bob", "Sam", "Joe"}, new String[] {"Fantasy", "Detective"}, new String[]{}));
+    }
+
+    @ChangeSet(order = "003", id = "userInit", runAlways = true, author = "abashmakov")
+    public void initUser(UserRepository userRepository){
+        userRepository.save(
+                User.builder()
+                        .login("admin")
+                        .password("$2y$10$cVPHcu5FxHPiiRpQpjYCqOc1b8Qm/hir0kUt72AuOVPfCQYZ706yi")
+                        .accountNonExpired(true)
+                        .accountNonLocked(true)
+                        .credentialsNonExpired(true)
+                        .enabled(true)
+                .build());
+        userRepository.save(
+                User.builder()
+                        .login("user")
+                        .password("$2y$10$60w33EB8NkhHk2ZSVPoNY.Bf0CYlZa7NYEouxXFB3exP8LcWVSCki")
+                        .accountNonExpired(true)
+                        .accountNonLocked(true)
+                        .credentialsNonExpired(true)
+                        .enabled(true)
+                        .build());
     }
 
     private Book initBook(String title, String[] authors, String[] genres, String[] comments) {

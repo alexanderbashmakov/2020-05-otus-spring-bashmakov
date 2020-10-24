@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.otus.library.domain.Book;
@@ -35,6 +36,28 @@ class BookControllerTest {
     @MockBean
     private BookService service;
 
+
+
+    @Test
+    @WithMockUser(username = "user")
+    @DisplayName("/book method GET")
+    public void get() throws Exception{
+        final String bookId = "1";
+        final Book book = Book.builder()
+                .id(bookId)
+                .name("testBook")
+                .authors(new ArrayList<>())
+                .genres(new ArrayList<>())
+                .build();
+        when(service.findById(bookId)).thenReturn(BookDto.toDto(book));
+        mockMvc.perform(MockMvcRequestBuilders.get(String.format("/book?id=%s", bookId)))
+                .andExpect(status().isOk())
+                .andExpect(view().name("book"))
+                .andExpect(content().string(containsString(book.getName())));
+        verify(service).findById(bookId);
+    }
+
+    @WithMockUser(username = "user")
     @Test
     @DisplayName("/ method GET")
     public void bookList() throws Exception{
@@ -56,24 +79,7 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("/book method GET")
-    public void get() throws Exception{
-        final String bookId = "1";
-        final Book book = Book.builder()
-                .id(bookId)
-                .name("testBook")
-                .authors(new ArrayList<>())
-                .genres(new ArrayList<>())
-                .build();
-        when(service.findById(bookId)).thenReturn(BookDto.toDto(book));
-        mockMvc.perform(MockMvcRequestBuilders.get(String.format("/book?id=%s", bookId)))
-                .andExpect(status().isOk())
-                .andExpect(view().name("book"))
-                .andExpect(content().string(containsString(book.getName())));
-        verify(service).findById(bookId);
-    }
-
-    @Test
+    @WithMockUser(username = "user")
     @DisplayName("/edit method POST")
     public void post() throws Exception{
         final String bookId = "1";
