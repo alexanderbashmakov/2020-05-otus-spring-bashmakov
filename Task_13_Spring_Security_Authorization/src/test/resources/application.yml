@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: none
+      port: 27017
+      host: localhost
+      database: library
+  mongodb:
+    embedded:
+      version: 4.0.2
+  mongock:
+    enabled: false
+locale: ru
+
