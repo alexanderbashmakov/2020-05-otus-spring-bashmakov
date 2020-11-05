@@ -3,6 +3,7 @@ package ru.otus.library.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Book;
@@ -19,6 +20,7 @@ public class BookServiceImpl implements BookService {
     private final MessageBundleService messages;
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public void save(Book book) {
         bookRepository.save(book);
@@ -45,12 +47,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public void deleteById(String id) {
         bookRepository.deleteById(id);
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public void deleteAll() {
         bookRepository.deleteAll();

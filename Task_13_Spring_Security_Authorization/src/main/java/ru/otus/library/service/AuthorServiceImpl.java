@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Author;
@@ -26,6 +27,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void update(@NonNull String id, Author author) {
         authorRepository.update(id, author);
     }
@@ -44,12 +46,14 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(String id) {
         authorRepository.deleteById(id);
     }
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteAll() {
         authorRepository.deleteAll();
     }

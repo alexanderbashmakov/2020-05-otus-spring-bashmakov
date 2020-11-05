@@ -4,6 +4,7 @@ import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoDatabase;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import ru.otus.library.domain.*;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.repository.UserRepository;
@@ -33,6 +34,7 @@ public class MongoDBInit {
                 User.builder()
                         .login("admin")
                         .password("$2y$10$cVPHcu5FxHPiiRpQpjYCqOc1b8Qm/hir0kUt72AuOVPfCQYZ706yi")
+                        .authorityList(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
                         .accountNonExpired(true)
                         .accountNonLocked(true)
                         .credentialsNonExpired(true)
@@ -42,6 +44,7 @@ public class MongoDBInit {
                 User.builder()
                         .login("user")
                         .password("$2y$10$60w33EB8NkhHk2ZSVPoNY.Bf0CYlZa7NYEouxXFB3exP8LcWVSCki")
+                        .authorityList(List.of(new SimpleGrantedAuthority("ROLE_USER")))
                         .accountNonExpired(true)
                         .accountNonLocked(true)
                         .credentialsNonExpired(true)
