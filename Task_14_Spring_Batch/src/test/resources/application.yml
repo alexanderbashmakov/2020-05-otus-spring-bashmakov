@@ -16,9 +16,9 @@ spring:
     mongodb:
       host: localhost
       port: 0
-      database: SpringBatchTestExampleDB
+      database: SpringBatchTestDB
 
 mongock:
   runner-type: InitializingBean
   change-logs-scan-package:
-    - ru.otus.example.springbatch.chandgelogs
+    - ru.otus.springbatch.chandgelogs

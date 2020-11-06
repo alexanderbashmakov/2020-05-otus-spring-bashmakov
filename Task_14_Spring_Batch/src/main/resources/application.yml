@@ -1,4 +1,6 @@
 spring:
+  jpa:
+    show-sql: true
   batch:
     job:
       enabled: false
@@ -22,16 +24,12 @@ spring:
       #uri: mongodb://localhost
       host: localhost
       port: 27017
-      database: SpringBatchExampleDB
+      database: SpringBatchDB
 
 mongock:
   runner-type: InitializingBean
   change-logs-scan-package:
-    - ru.otus.example.springbatch.chandgelogs
+    - ru.otus.springbatch.chandgelogs
 
-app:
-  ages-count-to-add: 1
-  input-file: entries.csv
-  output-file: output.dat
 
 #debug: true

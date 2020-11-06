@@ -1,4 +1,4 @@
-package ru.otus.example.springbatch.config;
+package ru.otus.springbatch.config;
 
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

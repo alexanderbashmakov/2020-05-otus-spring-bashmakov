@@ -1,13 +1,15 @@
-package ru.otus.example.springbatch.model;
+package ru.otus.springbatch.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class Person {
+public class Author {
+    private String id;
     private String name;
-    private int age;
 }
