@@ -12,7 +12,6 @@ public interface BookService {
     void save(Book book);
     BookDto findById(String id);
     Page<BookDto> findAll(Pageable pageable);
-    void printBook(String id);
     void deleteById(String id);
     void deleteAll();
 }

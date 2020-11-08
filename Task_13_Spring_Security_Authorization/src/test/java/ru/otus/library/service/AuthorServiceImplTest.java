@@ -29,9 +29,6 @@ class AuthorServiceImplTest {
     private AuthorRepository repository;
 
     @MockBean
-    private IOService ioService;
-
-    @MockBean
     private MessageBundleService messageBundleService;
 
     @DisplayName("сохраняет автора create()")
@@ -50,11 +47,6 @@ class AuthorServiceImplTest {
         Author author = Author.builder().name("testAuthor").build();
         service.update(id, author);
         verify(repository).update(id, author);
-    }
-
-    @DisplayName("выводит все записи printAll()")
-    @Test
-    void printAll() {
     }
 
     @DisplayName("удаляет запись по id deleteById()")

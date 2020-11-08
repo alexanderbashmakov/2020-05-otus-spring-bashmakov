@@ -16,7 +16,6 @@ import ru.otus.library.repository.BookRepository;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final IOService ioService;
     private final MessageBundleService messages;
 
     @Transactional
@@ -37,13 +36,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public Page<BookDto> findAll(Pageable pageable){
         return bookRepository.findAll(pageable).map(BookDto::toDto);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public void printBook(String id) {
-        Book book = bookRepository.findById(id).orElseThrow(EntityNotFound::new);
-        ioService.print(book.toString());
     }
 
     @Transactional

@@ -39,9 +39,6 @@ class BookServiceImplTest {
     private BookRepository repository;
 
     @MockBean
-    private IOService ioService;
-
-    @MockBean
     private MessageBundleService messageBundleService;
 
     @DisplayName("сохраняет книгу")
@@ -56,42 +53,6 @@ class BookServiceImplTest {
                 .build();
         service.save(book);
         verify(repository).save(book);
-    }
-
-    @DisplayName("выводит все записи")
-    @Test
-    void printAll() {
-        Mockito.when(messageBundleService.getMessage("book.id")).thenReturn("book_id");
-        Mockito.when(messageBundleService.getMessage("book.name")).thenReturn("book_name");
-        Mockito.when(messageBundleService.getMessage("book.authors")).thenReturn("authors");
-        Mockito.when(messageBundleService.getMessage("book.genres")).thenReturn("genres");
-        Mockito.when(messageBundleService.getMessage("book.total")).thenReturn("book_total");
-
-        List<Book> books = List.of(Book.builder()
-                .id("1L")
-                .name("testBook")
-                .authors(List.of(Author.builder().name("testAuthor").build()))
-                .genres(List.of(Genre.builder().name("testGenre").build()))
-                .comments(List.of(Comment.builder().comment("Wow").created(new Date()).build()))
-                .build());
-        PageImpl<Book> page = new PageImpl<>(books, PageRequest.of(0, books.size()), books.size());
-        Mockito.when(repository.findAll(any(Pageable.class))).thenReturn(page);
-        Mockito.when(repository.count()).thenReturn(1L);
-    }
-
-    @DisplayName("выводит запись по id printBook()")
-    @Test
-    void printBook() {
-        Book book = Book.builder()
-                .id("1L")
-                .name("testBook")
-                .authors(List.of(Author.builder().name("testAuthor").build()))
-                .genres(List.of(Genre.builder().name("testGenre").build()))
-                .comments(List.of(Comment.builder().comment("Wow").created(new Date()).build()))
-                .build();
-        Mockito.when(repository.findById("1L")).thenReturn(Optional.of(book));
-        service.printBook("1L");
-        verify(ioService).print(book.toString());
     }
 
     @DisplayName("удаляет запись по id deleteById()")

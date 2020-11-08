@@ -29,9 +29,6 @@ class GenreServiceImplTest {
     private GenreRepository repository;
 
     @MockBean
-    private IOService ioService;
-
-    @MockBean
     private MessageBundleService messageBundleService;
 
     @DisplayName("сохраняет жанр create()")
@@ -50,22 +47,6 @@ class GenreServiceImplTest {
         Genre genre = Genre.builder().name("testGenre").build();
         service.update(id, genre);
         verify(repository).update(id, genre);
-    }
-
-    @DisplayName("выводит все записи printAll()")
-    @Test
-    void printAll() {
-        Mockito.when(messageBundleService.getMessage("genre.id")).thenReturn("genre_id");
-        Mockito.when(messageBundleService.getMessage("genre.name")).thenReturn("genre_name");
-        Mockito.when(messageBundleService.getMessage("book.name")).thenReturn("book_name");
-
-        List<GenreDto> genres = List.of(GenreDto.builder().id("1L").bookId("10").bookName("Book").name("author").build());
-        PageRequest pageRequest = PageRequest.of(0, genres.size());
-        PageImpl<GenreDto> page = new PageImpl<>(genres, pageRequest, genres.size());
-
-
-        Mockito.when(repository.findGenres(pageRequest)).thenReturn(page);
-
     }
 
     @DisplayName("удаляет запись по id deleteById()")
