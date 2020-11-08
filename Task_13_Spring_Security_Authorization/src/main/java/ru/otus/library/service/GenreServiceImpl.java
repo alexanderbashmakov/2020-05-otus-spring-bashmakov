@@ -1,0 +1,60 @@
+package ru.otus.library.service;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.library.domain.Genre;
+import ru.otus.library.dto.GenreDto;
+import ru.otus.library.repository.GenreRepository;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class GenreServiceImpl implements GenreService {
+
+    private final GenreRepository genreRepository;
+
+    @Transactional
+    @Override
+    public void create(@NonNull String bookId, Genre genre) {
+        genreRepository.create(bookId, genre);
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
+    public void update(@NonNull String id, Genre genre) {
+        genreRepository.update(id, genre);
+    }
+
+    @Transactional
+    @Override
+    public Page<GenreDto> findAllByBook(Pageable pageable, String bookId) {
+        return genreRepository.findGenresByBookId(pageable, bookId);
+    }
+
+    @Transactional
+    @Override
+    public Optional<GenreDto> findById(String id) {
+        return genreRepository.findById(id);
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
+    public void deleteById(String id) {
+        genreRepository.deleteById(id);
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
+    public void deleteAll() {
+        genreRepository.deleteAll();
+    }
+}

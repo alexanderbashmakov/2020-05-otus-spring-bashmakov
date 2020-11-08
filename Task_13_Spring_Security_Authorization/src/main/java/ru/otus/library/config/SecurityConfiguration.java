@@ -19,18 +19,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public void configure( WebSecurity web ) {
-        //web.ignoring().antMatchers( "/" );
-    }
-
-    @Override
     public void configure( HttpSecurity http ) throws Exception {
         http.csrf().disable()
-//                .sessionManagement().sessionCreationPolicy( SessionCreationPolicy.ALWAYS )
-//                .and()
                 .authorizeRequests()
                     .antMatchers( "/public", "/error" ).anonymous()
-                    .antMatchers("/login*").permitAll()
+                    .antMatchers("/login", "/index", "/").permitAll()
+                    .antMatchers("/authors/**", "/genres/**", "/book/**").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
                 .and()
                 // Включает Form-based аутентификацию
