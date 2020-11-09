@@ -25,7 +25,8 @@ public class BookDst {
     @JoinColumn(name = "book_id")
     private List<AuthorDst> authors;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @ManyToMany(targetEntity = GenreDst.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "book_genres", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<GenreDst> genres;
 }

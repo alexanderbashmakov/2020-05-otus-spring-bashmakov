@@ -28,14 +28,11 @@ import javax.persistence.EntityManagerFactory;
 import java.util.Map;
 
 
-@SuppressWarnings("all")
 @Configuration
 public class JobConfig {
-    private static final int CHUNK_SIZE = 5;
+    private static final int CHUNK_SIZE = 1;
     private final Logger logger = LoggerFactory.getLogger("Batch");
 
-    public static final String OUTPUT_FILE_NAME = "outputFileName";
-    public static final String INPUT_FILE_NAME = "inputFileName";
     public static final String IMPORT_BOOK_JOB_NAME = "importBookJob";
 
     @Autowired
@@ -66,7 +63,7 @@ public class JobConfig {
 
     @Bean
     public Step importBooks(ItemReader<Book> mongoBookReader,
-                            ItemProcessor bookProcessor,
+                            ItemProcessor<Book, BookDst> bookProcessor,
                             ItemWriter<BookDst> bookWriter) {
         return stepBuilderFactory.get("importBooks")
                 .<Book, BookDst>chunk(CHUNK_SIZE)
@@ -88,8 +85,8 @@ public class JobConfig {
     }
 
     @Bean
-    public ItemProcessor bookProcessor(BookConverter bookConverter) {
-        return (ItemProcessor<Book, BookDst>) bookConverter::convertBook;
+    public ItemProcessor<Book, BookDst> bookProcessor(BookConverter bookConverter) {
+        return bookConverter::convertBook;
     }
 
     @Bean

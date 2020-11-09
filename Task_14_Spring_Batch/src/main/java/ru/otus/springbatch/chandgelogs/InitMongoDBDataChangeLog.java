@@ -23,7 +23,7 @@ public class InitMongoDBDataChangeLog {
     @ChangeSet(order = "002", id = "init", runAlways = true, author = "abashmakov")
     public void initDB(MongockTemplate template){
         template.insert(initBook("Famous Book", new String[] {"Talent", "Pushkin"}, new String[] {"Lyrics", "Roman"}, new String[]{}));
-        template.insert(initBook("Incredible Book", new String[] {"Bob", "Sam", "Joe"}, new String[] {"Fantasy", "Detective"}, new String[]{}));
+        template.insert(initBook("Incredible Book", new String[] {"Bob", "Sam", "Joe"}, new String[] {"Fantasy", "Detective", "Lyrics"}, new String[]{}));
     }
 
     private Book initBook(String title, String[] authors, String[] genres, String[] comments) {
