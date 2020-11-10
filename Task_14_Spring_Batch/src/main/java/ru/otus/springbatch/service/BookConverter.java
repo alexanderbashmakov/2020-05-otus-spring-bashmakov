@@ -16,9 +16,6 @@ public class BookConverter {
     private EntityManager em;
 
     public BookDst convertBook(Book book) {
-        List<AuthorDst> authors = book.getAuthors().stream().map(
-                author -> AuthorDst.builder().name(author.getName()).build())
-                .collect(Collectors.toList());
         List<GenreDst> genres = book.getGenres().stream().map(
                 genre -> {
                     TypedQuery<GenreTmp> query = em.createQuery("select g from GenreTmp g where g.name = :name", GenreTmp.class);
@@ -30,11 +27,9 @@ public class BookConverter {
                     }
                 }).map(genreTmp -> GenreDst.builder().id(genreTmp.getId()).name(genreTmp.getName()).build())
                 .collect(Collectors.toList());
-        BookDst bookDst = BookDst.builder()
+        return BookDst.builder()
                 .name(book.getName())
-                .authors(authors)
                 .genres(genres)
                 .build();
-        return bookDst;
     }
 }

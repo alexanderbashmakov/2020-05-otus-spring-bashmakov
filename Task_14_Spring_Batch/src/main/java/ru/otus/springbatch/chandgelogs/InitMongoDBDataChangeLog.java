@@ -4,7 +4,6 @@ import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import com.mongodb.client.MongoDatabase;
-import ru.otus.springbatch.model.Author;
 import ru.otus.springbatch.model.Book;
 import ru.otus.springbatch.model.Genre;
 
@@ -22,20 +21,15 @@ public class InitMongoDBDataChangeLog {
 
     @ChangeSet(order = "002", id = "init", runAlways = true, author = "abashmakov")
     public void initDB(MongockTemplate template){
-        template.insert(initBook("Famous Book", new String[] {"Talent", "Pushkin"}, new String[] {"Lyrics", "Roman"}));
-        template.insert(initBook("Incredible Book", new String[] {"Bob", "Sam", "Joe"}, new String[] {"Fantasy", "Detective", "Lyrics"}));
-        template.insert(initBook("Kinder Book", new String[] {"Sata", "Prod"}, new String[] {"Fantasy"}));
-        template.insert(initBook("Cooking Book", new String[] { "Man"}, new String[] {"Cooking"}));
-        template.insert(initBook("Dictionary", new String[] { "Roberts"}, new String[] {"Sciense", "Language"}));
-        template.insert(initBook("True story", new String[] { "Mondale"}, new String[] {"History", "Adventure"}));
+        template.insert(initBook("Famous Book", new String[] {"Lyrics", "Roman"}));
+        template.insert(initBook("Incredible Book", new String[] {"Fantasy", "Detective", "Lyrics"}));
+        template.insert(initBook("Kinder Book", new String[] {"Fantasy"}));
+        template.insert(initBook("Cooking Book", new String[] {"Cooking"}));
+        template.insert(initBook("Dictionary", new String[] {"Sciense", "Language"}));
+        template.insert(initBook("True story", new String[] {"History", "Adventure"}));
     }
 
-    private Book initBook(String title, String[] authors, String[] genres) {
-        List<Author> authorList = Arrays.stream(authors)
-                .map(author -> Author.builder()
-                        .id(UUID.randomUUID().toString())
-                        .name(author)
-                        .build()).collect(Collectors.toList());
+    private Book initBook(String title, String[] genres) {
         List<Genre> genreList = Arrays.stream(genres)
                 .map(genre -> Genre.builder()
                         .id(UUID.randomUUID().toString())
@@ -43,7 +37,6 @@ public class InitMongoDBDataChangeLog {
                         .build()).collect(Collectors.toList());
         return Book.builder()
                 .name(title)
-                .authors(authorList)
                 .genres(genreList)
                 .build();
     }

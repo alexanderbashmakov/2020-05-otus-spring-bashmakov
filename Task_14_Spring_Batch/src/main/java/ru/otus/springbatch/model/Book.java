@@ -18,6 +18,5 @@ public class Book {
     @Id
     private String id;
     private String name;
-    private List<Author> authors;
     private List<Genre> genres;
 }
