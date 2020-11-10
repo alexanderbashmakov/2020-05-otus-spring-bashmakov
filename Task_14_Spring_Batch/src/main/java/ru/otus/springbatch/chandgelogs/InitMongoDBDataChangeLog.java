@@ -22,11 +22,15 @@ public class InitMongoDBDataChangeLog {
 
     @ChangeSet(order = "002", id = "init", runAlways = true, author = "abashmakov")
     public void initDB(MongockTemplate template){
-        template.insert(initBook("Famous Book", new String[] {"Talent", "Pushkin"}, new String[] {"Lyrics", "Roman"}, new String[]{}));
-        template.insert(initBook("Incredible Book", new String[] {"Bob", "Sam", "Joe"}, new String[] {"Fantasy", "Detective", "Lyrics"}, new String[]{}));
+        template.insert(initBook("Famous Book", new String[] {"Talent", "Pushkin"}, new String[] {"Lyrics", "Roman"}));
+        template.insert(initBook("Incredible Book", new String[] {"Bob", "Sam", "Joe"}, new String[] {"Fantasy", "Detective", "Lyrics"}));
+        template.insert(initBook("Kinder Book", new String[] {"Sata", "Prod"}, new String[] {"Fantasy"}));
+        template.insert(initBook("Cooking Book", new String[] { "Man"}, new String[] {"Cooking"}));
+        template.insert(initBook("Dictionary", new String[] { "Roberts"}, new String[] {"Sciense", "Language"}));
+        template.insert(initBook("True story", new String[] { "Mondale"}, new String[] {"History", "Adventure"}));
     }
 
-    private Book initBook(String title, String[] authors, String[] genres, String[] comments) {
+    private Book initBook(String title, String[] authors, String[] genres) {
         List<Author> authorList = Arrays.stream(authors)
                 .map(author -> Author.builder()
                         .id(UUID.randomUUID().toString())

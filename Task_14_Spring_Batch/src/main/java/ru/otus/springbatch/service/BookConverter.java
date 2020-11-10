@@ -1,11 +1,7 @@
 package ru.otus.springbatch.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.springbatch.model.AuthorDst;
-import ru.otus.springbatch.model.Book;
-import ru.otus.springbatch.model.BookDst;
-import ru.otus.springbatch.model.GenreDst;
+import ru.otus.springbatch.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,26 +19,22 @@ public class BookConverter {
         List<AuthorDst> authors = book.getAuthors().stream().map(
                 author -> AuthorDst.builder().name(author.getName()).build())
                 .collect(Collectors.toList());
-/*
-        List<GenreDst> genres = book.getGenres().stream().map(
-                genre -> GenreDst.builder().name(genre.getName()).build())
-                .collect(Collectors.toList());
-*/
         List<GenreDst> genres = book.getGenres().stream().map(
                 genre -> {
-                    TypedQuery<GenreDst> query = em.createQuery("select g from GenreDst g where g.name = :name", GenreDst.class);
+                    TypedQuery<GenreTmp> query = em.createQuery("select g from GenreTmp g where g.name = :name", GenreTmp.class);
                     query.setParameter("name", genre.getName());
                     try {
                         return query.getSingleResult();
                     } catch (Exception e) {
-                        return GenreDst.builder().name(genre.getName()).build();
+                        return GenreTmp.builder().name(genre.getName()).build();
                     }
-                })
+                }).map(genreTmp -> GenreDst.builder().id(genreTmp.getId()).name(genreTmp.getName()).build())
                 .collect(Collectors.toList());
-        return BookDst.builder()
+        BookDst bookDst = BookDst.builder()
                 .name(book.getName())
                 .authors(authors)
                 .genres(genres)
                 .build();
+        return bookDst;
     }
 }
