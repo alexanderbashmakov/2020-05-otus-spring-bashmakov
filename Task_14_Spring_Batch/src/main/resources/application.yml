@@ -1,0 +1,35 @@
+spring:
+  jpa:
+    show-sql: true
+  batch:
+    job:
+      enabled: false
+  shell:
+    interactive:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  data:
+    mongodb:
+      #uri: mongodb://localhost
+      host: localhost
+      port: 27017
+      database: SpringBatchDB
+
+mongock:
+  runner-type: InitializingBean
+  change-logs-scan-package:
+    - ru.otus.springbatch.chandgelogs
+
+
+#debug: true
