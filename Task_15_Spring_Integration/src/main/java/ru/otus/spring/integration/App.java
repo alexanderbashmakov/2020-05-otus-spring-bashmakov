@@ -37,7 +37,6 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
-        //AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
 
         Course course = ctx.getBean(Course.class);
 
