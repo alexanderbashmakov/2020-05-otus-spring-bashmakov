@@ -1,92 +1,50 @@
 package ru.otus.spring.integration;
 
-import org.apache.commons.lang3.RandomUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.channel.PublishSubscribeChannel;
-import org.springframework.integration.channel.QueueChannel;
-import org.springframework.integration.config.EnableIntegration;
-import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.dsl.MessageChannels;
-import org.springframework.integration.dsl.Pollers;
-
-import org.springframework.integration.scheduling.PollerMetadata;
 import ru.otus.spring.integration.domain.OtusStudent;
-import ru.otus.spring.integration.domain.SpringMaster;
+import ru.otus.spring.integration.domain.Person;
+import ru.otus.spring.integration.gateway.Course;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 
 
 @IntegrationComponentScan
 @SuppressWarnings({"resource", "Duplicates", "InfiniteLoopStatement"})
-@ComponentScan
-@Configuration
-@EnableIntegration
+@SpringBootApplication
+@RequiredArgsConstructor
 public class App {
-    private static final String[] MENU = {"coffee", "tea", "smoothie", "whiskey", "beer", "cola", "water"};
+    @Qualifier("noPassedTasksChannel")
+    private final PublishSubscribeChannel noPassedTasksChannel;
 
-    @Bean
-    public QueueChannel itemsChannel() {
-        return MessageChannels.queue(10).get();
-    }
+    @Qualifier("noPassedProjectChannel")
+    private final PublishSubscribeChannel noPassedProjectChannel;
 
-    @Bean
-    public PublishSubscribeChannel foodChannel() {
-        return MessageChannels.publishSubscribe().get();
-    }
-
-    @Bean (name = PollerMetadata.DEFAULT_POLLER )
-    public PollerMetadata poller () {
-        return Pollers.fixedRate(100).maxMessagesPerPoll(2).get() ;
-    }
-
-    @Bean
-    public IntegrationFlow cafeFlow() {
-        return IntegrationFlows.from("itemsChannel")
-                .split()
-                .handle("kitchenService", "cook")
-                .aggregate()
-                .channel("foodChannel")
-                .get();
+    @PostConstruct
+    public void subscribeOnChannels() {
+        noPassedTasksChannel.subscribe(message ->
+                System.out.printf("Студент %s не сдал все домашние задания\n", ((OtusStudent) message.getPayload()).getPerson().getName()));
+        noPassedProjectChannel.subscribe(message ->
+                System.out.printf("Студент %s не прошел защиту проектной работы\n", ((OtusStudent) message.getPayload()).getPerson().getName()));
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
+        ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
+        //AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
 
-        // here we works with cafe using interface
-        Cafe cafe = ctx.getBean(Cafe.class);
+        Course course = ctx.getBean(Course.class);
 
-        while (true) {
-            Thread.sleep(1000);
 
-            Collection<SpringMaster> items = generateOrderItems();
-            System.out.println("New orderItems: " +
-                    items.stream().map(SpringMaster::getItemName)
-                            .collect(Collectors.joining(",")));
-            Collection<OtusStudent> food = cafe.process(items);
-            System.out.println("Ready food: " + food.stream()
-                    .map(OtusStudent::getName)
-                    .collect(Collectors.joining(",")));
+        for (int i = 0; i < 10; i++) {
+            final Person person = new Person("Student" + i, 20 + i);
+            System.out.println(course.process(new OtusStudent(person, false, false)));
         }
-    }
-
-    private static SpringMaster generateOrderItem() {
-        return new SpringMaster(MENU[RandomUtils.nextInt(0, MENU.length)]);
-    }
-
-    private static Collection<SpringMaster> generateOrderItems() {
-        List<SpringMaster> items = new ArrayList<>();
-        for (int i = 0; i < RandomUtils.nextInt(1, 5); ++i) {
-            items.add(generateOrderItem());
-        }
-        return items;
     }
 }

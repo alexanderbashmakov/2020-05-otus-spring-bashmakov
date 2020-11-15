@@ -1,5 +1,4 @@
-package ru.otus.spring.integration;
-
+package ru.otus.spring.integration.gateway;
 
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
@@ -9,8 +8,8 @@ import ru.otus.spring.integration.domain.SpringMaster;
 import java.util.Collection;
 
 @MessagingGateway
-public interface Cafe {
+public interface Course {
 
-    @Gateway(requestChannel = "itemsChannel", replyChannel = "foodChannel")
-    Collection<OtusStudent> process(Collection<SpringMaster> orderItem);
+    @Gateway(requestChannel = "startCourseChannel", replyChannel = "graduateChannel")
+    SpringMaster process(OtusStudent student);
 }
