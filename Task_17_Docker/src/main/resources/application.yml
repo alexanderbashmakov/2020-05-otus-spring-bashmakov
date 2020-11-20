@@ -1,0 +1,19 @@
+spring:
+  messages:
+    basename: bundle
+  data:
+    mongodb:
+      authentication-database: none
+      port: ${MONGO_PORT}
+      host: ${MONGO_HOST}
+      database: library
+mongock:
+  change-logs-scan-package:
+    - ru.otus.library.changelogs
+  enabled: true
+  runner-type: InitializingBean
+locale: ru
+logging:
+  level:
+    ROOT: INFO
+
