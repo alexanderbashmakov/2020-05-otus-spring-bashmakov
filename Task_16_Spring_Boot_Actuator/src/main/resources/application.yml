@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+    initialization-mode: always
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+
+  data:
+    rest:
+      base-path: /datarest
+
+  messages:
+    basename: bundle
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+    show-sql: true
+
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+
+locale: ru
+
+logging:
+  file:
+    name: info.log
+  level:
+    root: info
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
