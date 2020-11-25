@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "spring.mongock.change-logs-scan-package",
+      "type": "java.lang.String",
+      "description": "Description for spring.mongock.change-logs-scan-package."
+    },
+    {
+      "name": "eureka.client.fetch-registry",
+      "type": "java.lang.String",
+      "description": "Description for eureka.client.fetch-registry."
+    }
+  ] }

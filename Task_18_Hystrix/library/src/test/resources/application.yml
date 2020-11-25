@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      port: 0
+      host: localhost
+      database: library
+  mongodb:
+    embedded:
+      version: 4.0.2
+mongock:
+  enabled: false
+locale: ru
+

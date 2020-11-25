@@ -1,0 +1,57 @@
+server:
+  port: 8080
+spring:
+  messages:
+    basename: bundle
+  data:
+    mongodb:
+      authentication-database: none
+      port: ${DB_PORT}
+      host: ${DB_HOST}
+      database: ${DB_NAME}
+  application:
+    name: library
+mongock:
+  change-logs-scan-package:
+    - ru.otus.library.changelogs
+  enabled: true
+  runner-type: InitializingBean
+
+locale: ru
+#logging:
+#  level:
+#    ROOT: INFO
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8001/eureka}
+    enabled: true
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    leaseExpirationDurationInSeconds: 90
+    leaseRenewalIntervalInSeconds: 30
+    prefer-ip-address: true
+  server:
+    eviction-interval-timer-in-ms: 15000
+hystrix:
+  command:
+    authors:
+      circuitBreaker:
+        requestVolumeThreshold: 10
+        errorThresholdPercentage: 50
+        sleepWindowInMilliseconds: 6
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 15000
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
