@@ -1,0 +1,36 @@
+version: '3'
+services:
+  eureka-discovery-server:
+    build:
+      context: .
+      dockerfile: ./eureka-discovery-server/Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - EUREKA_DISCOVERY_PORT=8001
+    networks:
+      - nw
+  app:
+    build:
+      context: .
+      dockerfile: ./library/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_NAME=library
+      - EUREKA_URL=http://eureka-discovery-server:8001/eureka
+    networks:
+      - nw
+    depends_on:
+      - eureka-discovery-server
+      - mongo
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - nw
+networks:
+  nw:

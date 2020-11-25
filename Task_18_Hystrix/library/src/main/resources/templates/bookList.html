@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+<div class="container">
+    <div th:insert="header :: localization"></div>
+    <h1 th:text="#{books}">Books</h1>
+    <div class="flex-row mt-3 mb-3" align="left">
+        <form id="add" th:action="@{/book}" th:method="get" action="book.html">
+            <button class="btn btn-primary" type="submit" th:text="#{button.add}">Add New</button>
+        </form>
+    </div>
+    <table class="table table-striped table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th th:text="#{book.name}">Name</th>
+            <th th:text="#{book.authors}">Authors</th>
+            <th th:text="#{book.genres}">Genres</th>
+            <th th:text="#{action}">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${page.content}">
+            <td th:text="${book.id}">1</td>
+            <td th:text="${book.name}">John Doe</td>
+            <td>
+                <div class="container" th:each="author : ${book.authors}">
+                    <span th:text="${author}"></span>
+                </div>
+            </td>
+            <td>
+                <div class="container" th:each="genre : ${book.genres}">
+                    <span th:text="${genre}"></span>
+                </div>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-light btn-sm" role="button" th:text="#{book.authors}"
+                       th:href="@{/authors(bookId=${book.id})}" href="authorList.html">Authors</a>
+                    <a class="btn btn-light btn-sm" role="button" th:text="#{book.genres}"
+                       th:href="@{/genres(bookId=${book.id})}" href="genreList.html">Genres</a>
+                    <a class="btn btn-info btn-sm" role="button" th:text="#{button.edit}"
+                       th:href="@{/book(id=${book.id})}" href="book.html">Edit</a>
+                    <form id="delete" th:action="@{/deleteBook(id=${book.id})}" th:method="post" action="bookList.html">
+                        <button class="btn btn-danger btn-sm" type="submit" th:text="#{button.delete}">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation" class="navbar navbar-dark bg-dark">
+        <ul class="pagination" th:if="${page.totalPages > 0}">
+            <li th:class="${pageNumber==page.number + 1} ? 'page-item active' : 'page-item'" th:each="pageNumber : ${pageNumbers}">
+                <a class="page-link" th:text="${pageNumber}" th:href="@{/(page=${pageNumber - 1},size=${page.size})}">1</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
